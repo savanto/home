@@ -13,6 +13,7 @@
   cm = commit
   ac = !git add -A && git commit
   st = status -sb
+  ls = ls-tree --name-only -r HEAD
   tags = tag -l
   branches = branch -a
   remotes = remote -v
