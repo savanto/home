@@ -13,12 +13,16 @@
 HISTCONTROL=ignoreboth
 
 # Set shell options. For a full list of options see bash(1).
+#
 # Append the history list to the file named by the value of the HISTFILE
 # variable when the shell exits, rather than overwriting the file.
 shopt -s histappend
 # Do not allow the source (.) builtin to use the value of PATH to find the
 # directory containing the file supplied as an argument.
 shopt -u sourcepath
+# Check the window size after each command and update the values of LINES and
+# COLUMNS if necessary.
+shopt -s checkwinsize
 
 # Enable the lesspipe filter for less for viewing a wider variety of files.
 # See lesspipe(1) for more info.
