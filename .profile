@@ -11,18 +11,23 @@
 # Setup PATH, with custom binary locations taking precedence over system ones.
 # $HOME/bin:/usr/local/{bin,sbin}:/usr/{bin,sbin}:/{bin,sbin}
 
-# NOTE: /usr/local is considered obsolete by the Filesystem Hierarchy Standard.
-# Package managers are used to install all packages under /usr, however, if any
-# packages are installed by hand, they should go under /usr/local and the
-# following locations added to the PATH.
+# PATH set up to give precedence to packages installed with MacPorts in
+# /opt/local, or manually in /usr/local.
 #
-# Host-specific command binaries
-PATH="/usr/local/bin"
-# Host-specific system binaries
-PATH="${PATH}:/usr/local/sbin"
+# MacPorts GNU binaries
+[[ -d "/opt/local/libexec/gnubin" ]] && PATH="${PATH}/opt/local/libexec/gnubin:"
+# MacPorts command binaries
+[[ -d "/opt/local/bin" ]] && PATH="${PATH}/opt/local/bin:"
+# MacPorts system binaries
+[[ -d "/opt/local/sbin" ]] && PATH="${PATH}/opt/local/sbin:"
+
+# Manually installed command binaries
+[[ -d "/usr/local/bin" ]] && PATH="${PATH}/usr/local/bin:"
+# Manually installed system binaries
+[[ -d "/usr/local/sbin" ]] && PATH="${PATH}/usr/local/sbin:"
 
 # Non-essential command binaries
-PATH="${PATH}:/usr/bin"
+PATH="${PATH}/usr/bin"
 # Non-essential system binaries
 PATH="${PATH}:/usr/sbin"
 
@@ -32,4 +37,20 @@ PATH="${PATH}:/bin"
 PATH="${PATH}:/sbin"
 
 # Prepend personal bin directory to PATH if it exists
-if [[ -d "${HOME}/bin" ]]; then PATH="${HOME}/bin:${PATH}"; fi
+[[ -d "${HOME}/bin" ]] && PATH="${HOME}/bin:${PATH}"
+
+
+# MANPATH setup to give precedence to packages installed with MacPorts in
+# /opt/local, or manually in /usr/local.
+#
+# MacPorts GNU man pages
+[[ -d "/opt/local/libexec/gnubin/man" ]] && \
+  MANPATH="${MANPATH}/opt/local/libexec/gnubin/man:"
+# MacPorts man pages
+[[ -d "/opt/local/share/man" ]] && MANPATH="${MANPATH}/opt/local/share/man:"
+
+# Manually installed man pages
+[[ -d "/usr/local/share/man" ]] && MANPAGES="${MANPATH}/usr/local/share/man:"
+
+# System man pages
+MANPATH="${MANPATH}/usr/share/man"
