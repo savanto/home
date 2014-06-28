@@ -14,6 +14,8 @@
 # PATH set up to give precedence to packages installed with MacPorts in
 # /opt/local, or manually in /usr/local.
 #
+# Clear PATH
+PATH=
 # MacPorts GNU binaries
 [[ -d "/opt/local/libexec/gnubin" ]] && PATH="${PATH}/opt/local/libexec/gnubin:"
 # MacPorts command binaries
