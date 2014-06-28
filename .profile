@@ -16,6 +16,8 @@
 # packages are installed by hand, they should go under /usr/local and the
 # following locations added to the PATH.
 #
+# Clear PATH
+PATH=
 # Host-specific command binaries
 PATH="/usr/local/bin"
 # Host-specific system binaries
