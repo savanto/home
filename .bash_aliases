@@ -28,7 +28,7 @@ alias python2='python2.7'
 alias python3='python3.4'
 
 # vim used as pager to support syntax highlighting
-alias vless='vim -u /opt/local/share/vim/vim74/macros/less.sh'
+alias vless='/opt/local/share/vim/vim74/macros/less.sh'
 
 # Common commands in Russian
 alias св='cd'
