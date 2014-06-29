@@ -1,0 +1,151 @@
+#
+# ~/.dircolors
+#
+# Configuration file for dircolors, a utility to help set the LS_COLORS
+# environment variable.
+
+# TERM entry for this terminal.
+TERM xterm-256color
+
+# Attribute codes:
+# 00=none 01=bold 04=underscore 05=blink 07=reverse 08=concealed
+# Text color codes:
+# 30=black 31=red 32=green 33=yellow 34=blue 35=magenta 36=cyan 37=white
+# Background color codes:
+# 40=black 41=red 42=green 43=yellow 44=blue 45=magenta 46=cyan 47=white
+#
+# Color init strings for basic file types.
+NORMAL                00        # No color
+RESET                 00        # Reset to normal color
+FILE                  00        # Regular file
+DIR                   34        # Directory
+LINK                  36        # Symbolic link
+MULTIHARDLINK         00        # Regular file with more than one link
+FIFO                  35;01     # Pipe
+SOCK                  35;01     # Socket
+DOOR                  35;01     # Door
+BLK                   33;01     # Block device driver
+CHR                   33;01     # Character device driver
+ORPHAN                30;46     # Symlink to nonexistent/non-stat'able file
+SETUID                37;41     # File that is setuid (u+s)
+SETGID                30;41     # File that is setgid (g+s)
+CAPABILITY            32;41     # File with capability
+OTHER_WRITABLE        37;44     # Dir that is other-writable (o+w)
+STICKY                30;44     # Dir that is sticky (+t)
+STICKY_OTHER_WRITABLE 33;44;01  # Dir that is sticky and other-writable (+t,o+w)
+EXEC                  32        # File with execute permission (+x)
+
+# Color init strings by file extension.
+#
+# Archives/compressed
+.tar  31;01
+.tgz  31;01
+.arc  31;01
+.arj  31;01
+.taz  31;01
+.lha  31;01
+.lz4  31;01
+.lzh  31;01
+.lzma 31;01
+.tlz  31;01
+.txz  31;01
+.tzo  31;01
+.t7z  31;01
+.zip  31;01
+.z    31;01
+.Z    31;01
+.dz   31;01
+.gz   31;01
+.lrz  31;01
+.lz   31;01
+.lzo  31;01
+.xz   31;01
+.bz2  31;01
+.bz   31;01
+.tbz  31;01
+.tbz2 31;01
+.tz   31;01
+.deb  31;01
+.rpm  31;01
+.jar  31;01
+.war  31;01
+.ear  31;01
+.sar  31;01
+.rar  31;01
+.alz  31;01
+.ace  31;01
+.zoo  31;01
+.cpio 31;01
+.7z   31;01
+.rz   31;01
+.cab  31;01
+
+# Visual media files (images/video)
+.jpg  35;01
+.jpeg 35;01
+.gif  35;01
+.bmp  35;01
+.pbm  35;01
+.pgm  35;01
+.ppm  35;01
+.tga  35;01
+.xbm  35;01
+.xpm  35;01
+.tif  35;01
+.tiff 35;01
+.png  35;01
+.svg  35;01
+.svgz 35;01
+.mng  35;01
+.pcx  35;01
+.mov  35;01
+.mpg  35;01
+.mpeg 35;01
+.m2v  35;01
+.mkv  35;01
+.webm 35;01
+.ogm  35;01
+.mp4  35;01
+.m4v  35;01
+.mp4v 35;01
+.vob  35;01
+.qt   35;01
+.nuv  35;01
+.wmv  35;01
+.asf  35;01
+.rm   35;01
+.rmvb 35;01
+.flc  35;01
+.avi  35;01
+.fli  35;01
+.flv  35;01
+.gl   35;01
+.dl   35;01
+.xcf  35;01
+.xwd  35;01
+.yuv  35;01
+.cgm  35;01
+.emf  35;01
+# http://wiki.xiph.org/index.php/MIME_Types_and_File_Extensions
+.axv  35;01
+.anx  35;01
+.ogv  35;01
+.ogx  35;01
+
+# Audio media files
+.aac  33
+.au   33
+.flac 33
+.mid  33
+.midi 33
+.mka  33
+.mp3  33
+.mpc  33
+.ogg  33
+.ra   33
+.wav  33
+# http://wiki.xiph.org/index.php/MIME_Types_and_File_Extensions
+.axa  33
+.oga  33
+.spx  33
+.xspf 33
