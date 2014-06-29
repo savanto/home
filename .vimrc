@@ -116,8 +116,8 @@ set ofu=syntaxcomplete#Complete
 syntax enable
 " Set colorscheme
 set background=dark
-colorscheme slate
-"colorscheme solarized
+"colorscheme slate
+colorscheme solarized
 
 " Set encoding
 set encoding=utf8
