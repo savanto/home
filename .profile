@@ -56,3 +56,5 @@ PATH="${PATH}:/sbin"
 
 # System man pages
 MANPATH="${MANPATH}/usr/share/man"
+
+export PATH MANPATH
