@@ -19,3 +19,9 @@ alias egrep='egrep --color=auto'
 
 # dmesg
 alias dmesg='dmesg --color=auto'
+
+# sudo (hack to allow sudo with aliases)
+alias sudo='sudo '
+
+# apt-get
+alias agi='apt-get install --no-install-recommends'
