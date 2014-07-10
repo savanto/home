@@ -36,3 +36,6 @@ eval "$(dircolors --sh)"
 
 # Source alias definitions.
 [[ -f "${HOME}/.bash_aliases" ]] && . "${HOME}/.bash_aliases"
+
+# Source virtualenvwrapper code
+source /etc/bash_completion.d/virtualenvwrapper
