@@ -32,4 +32,8 @@ PATH="${PATH}:/bin"
 PATH="${PATH}:/sbin"
 
 # Prepend personal bin directory to PATH if it exists
-if [[ -d "${HOME}/bin" ]]; then PATH="${HOME}/bin:${PATH}"; fi
+[ -d "${HOME}/bin" ] && PATH="${HOME}/bin:${PATH}"
+
+# If running x session, configure dual monitors.
+[ -n "$XAUTHORITY" ] && [ -e ~/.screenlayout/dual-monitors.sh ] && \
+  /bin/bash ~/.screenlayout/dual-monitors.sh
