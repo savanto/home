@@ -25,8 +25,3 @@ alias sudo='sudo '
 
 # apt-get
 alias agi='apt-get install --no-install-recommends'
-
-# Brilliant dev environment aliases
-alias runserver='python ~/devel/brilliant/manage.py runserver 10.1.10.38:8080'
-alias adb='~/devel/adt/sdk/platform-tools/adb'
-alias eclipse='~/devel/adt/eclipse/eclipse'
