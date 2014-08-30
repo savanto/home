@@ -35,5 +35,5 @@ PATH="${PATH}:/sbin"
 [ -d "${HOME}/bin" ] && PATH="${HOME}/bin:${PATH}"
 
 # If running x session, configure dual monitors.
-[ -n "$XAUTHORITY" ] && [ -e ~/.screenlayout/dual-monitors.sh ] && \
-  /bin/bash ~/.screenlayout/dual-monitors.sh
+[ -n "$XAUTHORITY" ] && [ -e ~/.xinitrc ] && \
+  /bin/bash ~/.xinitrc

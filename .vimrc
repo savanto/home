@@ -85,6 +85,8 @@ set tm=500
 
 "" Update window title
 set title
+set titleold=""
+set titlestring=VIM:\ %F
 
 "" Display current command
 set showcmd
