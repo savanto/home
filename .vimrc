@@ -154,6 +154,7 @@ set shiftround
 " Color 80th column if possible, or highlight lines that exceed 80 chars
 if exists('+colorcolumn')
   set colorcolumn=80
+	hi ColorColumn ctermbg=cyan guibg=cyan
 else
   autocmd BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
 endif
