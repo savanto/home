@@ -13,6 +13,9 @@
   <item label="browser">
     <action name="Execute"><execute>x-www-browser</execute></action>
   </item>
+  <item label="eclipse">
+    <action name="Execute"><execute>~/devel/adt/eclipse/eclipse</execute></action>
+  </item>
   <separator />
 
   <!-- Desktops -->
