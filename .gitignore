@@ -1,3 +1,40 @@
+# History files
 .bash_history
+.sh_history
+.sc_history
+.python_history
+.sqlite_history
 .lesshst
 .viminfo
+
+# Security
+.gnupg/
+.keepassx/
+.ssh/
+.Xauthority
+
+# Home directories
+.Trash/
+Applications/
+Desktop/
+Documents/
+Downloads/
+Library/
+Movies/
+Music/
+Pictures/
+Public/
+Sites/
+
+# App directories
+.android/
+.cmus/
+.cups/
+.john/
+.macports/
+.pip/
+.vbox/
+
+# Misc
+.CFUserTextEncoding
+.DS_Store
