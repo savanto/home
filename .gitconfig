@@ -22,4 +22,4 @@
   ui = 1
 
 [help]
-  autocorrect = 1
+  autocorrect = 0
