@@ -38,5 +38,7 @@ eval "$(dircolors --sh $DIRCOLORS)"
 # Source alias definitions.
 [[ -f "${HOME}/.bash_aliases" ]] && . "${HOME}/.bash_aliases"
 
-# Source virtualenvwrapper code
-source /etc/bash_completion.d/virtualenvwrapper
+# Enable bash completion in interactive shells.
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+    . /etc/bash_completion
+fi
