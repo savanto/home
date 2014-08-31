@@ -25,6 +25,7 @@
 .john/
 .pip/
 .vbox/
+.vim/.netrwhist
 
 # Home directories
 tmp/
