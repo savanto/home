@@ -9,33 +9,28 @@
 
 # Security
 .gnupg/
-.keepassx/
 .password-store/
 .ssh/
+.aws/
+.pki/
+.pgpass
 .Xauthority
-
-# Home directories
-.Trash/
-Applications/
-Desktop/
-Documents/
-Downloads/
-Library/
-Movies/
-Music/
-Pictures/
-Public/
-Sites/
+.Private
+.ecryptfs
 
 # App directories
 .android/
 .cmus/
 .cups/
 .john/
-.macports/
 .pip/
 .vbox/
 
+# Home directories
+tmp/
+
 # Misc
-.CFUserTextEncoding
-.DS_Store
+.cache/
+.dbus/
+.fontconfig/
+.xsession-errors
