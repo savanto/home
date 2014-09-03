@@ -18,6 +18,9 @@
   </item>
   <separator />
 
+  <!-- Clock -->
+  <menu id="time" label="time" execute="~/.config/openbox/time.sh" />
+
   <!-- Desktops -->
   <menu id="client-list-menu" />
   <separator />
