@@ -42,3 +42,6 @@ eval "$(dircolors --sh $DIRCOLORS)"
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
+
+# Set default editor
+export EDITOR=/usr/bin/vim
