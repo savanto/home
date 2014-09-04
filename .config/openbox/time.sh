@@ -1,5 +1,5 @@
 #!/bin/bash
 
 echo "<openbox_pipe_menu>"
-echo "  <item label=\"$(uptime | cut -d' ' -f2)\" />"
+echo "  <item label=\"$(date)\" />"
 echo "</openbox_pipe_menu>"
