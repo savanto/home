@@ -23,6 +23,8 @@
 .android/
 .cmus/
 .cups/
+.gegl-0.0/
+.gimp-2.6/
 .john/
 .pip/
 .pulse/
@@ -39,4 +41,6 @@ production/
 .cache/
 .dbus/
 .fontconfig/
+.local/
+.thumbnails/
 .xsession-errors
