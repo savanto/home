@@ -335,6 +335,10 @@
   <keybind key="A-Print">
     <action name="Execute"><command>scrot -u</command></action>
   </keybind>
+  <!-- Take a screenshot with adb -->
+  <keybind key="C-Print">
+    <action name="Execute"><command>adb screencap</command></action>
+  </keybind>
 </keyboard>
 
 <mouse>
