@@ -327,16 +327,20 @@
     </action>
   </keybind>
 
-  <!-- Take screenshot with scrot -->
+  <!-- Take screenshot of current window with scrot -->
   <keybind key="Print">
-    <action name="Execute"><command>scrot</command></action>
-  </keybind>
-  <!-- Take a screenshot of the current window with scrot -->
-  <keybind key="A-Print">
     <action name="Execute"><command>scrot -u</command></action>
   </keybind>
-  <!-- Take a screenshot with adb -->
+  <!-- Take screenshot of selection with scrot -->
   <keybind key="C-Print">
+    <action name="Execute"><command>scrot -s</command></action>
+  </keybind>
+  <!-- Take screenshot of entire workspace with scrot -->
+  <keybind key="A-Print">
+    <action name="Execute"><command>scrot</command></action>
+  </keybind>
+  <!-- Take screenshot of attached Android device with adb -->
+  <keybind key="W-Print">
     <action name="Execute"><command>adb screencap</command></action>
   </keybind>
 </keyboard>
