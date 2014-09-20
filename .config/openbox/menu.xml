@@ -23,6 +23,7 @@
 
   <!-- Clock -->
   <menu id="time" label="time" execute="~/.config/openbox/time.sh" />
+  <menu id="watch" label="watch" execute="~/.config/openbox/onwatch.sh" />
 
   <!-- Desktops -->
   <menu id="client-list-menu" />
