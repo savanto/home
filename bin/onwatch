@@ -18,9 +18,11 @@ usage() {
   echo "Options:"
   echo "  -b        print visual indicator for the number of bells ('*')"
   echo "  -w        print the current watch"
+  echo "  -m        mute sounding of bells; again to undo"
+  echo "  -M        mute ALL output from onwatch; again to undo"
   echo "  -n        post-Nore Mutiny Dog watches"
   echo "  -p        show popup notification (requires Growl and growlnotify)"
-  echo "  -s        play bell sounds (requires afplay, {1..8}bells.mp3 files"
+  echo "  -s        sound bells (requires afplay, {1..8}bells.mp3 files"
   echo "  -q        do NOT print to stdout; other display options unaffected"
   echo "  -d date   show bells for 'date'"
   echo "  -h        print this help and exit"
@@ -28,11 +30,16 @@ usage() {
   echo "All other options are ignored."
 }
 
+MUTE=/tmp/onwatch_mute
+MUTE_ALL=/tmp/onwatch_mute_all
+
 # Process command line arguments
-while getopts :bwnpsqd:h opt; do
+while getopts :bwmMnpsqd:h opt; do
   case "$opt" in
     b)  SHOW_BELLS=1 ;;
     w)  SHOW_WATCH=1 ;;
+    m)  [[ -f "$MUTE" ]] && rm "$MUTE" || touch "$MUTE" ;;
+    M)  [[ -f "$MUTE_ALL" ]] && rm "$MUTE_ALL" || touch "$MUTE_ALL" ;;
     n)  NORE=1 ;;
     p)  POPUP=1 ;;
     s)  SOUND=1 ;;
@@ -41,6 +48,8 @@ while getopts :bwnpsqd:h opt; do
     h)  usage && exit 0 ;;
   esac
 done
+
+[[ -f "$MUTE_ALL" ]] && exit 0
 
 # Watch names
 WATCH[0]="Morning Watch"
@@ -102,11 +111,10 @@ fi
 [[ -n "$SHOW_WATCH" ]] && output="${output}${WATCH[$watch]}"
 
 # Display xmessage popup, if possible
-[[ -n "$POPUP" ]] && which growlnotify > /dev/null \
-  && growlnotify --message "$output"
+[[ -n "$POPUP" ]] && /usr/local/bin/growlnotify --message "$output"
 
 # Play bell sounds
-if [[ -n "$SOUND" ]]; then
+if [[ -n "$SOUND" ]] && [[ ! -f "$MUTE" ]]; then
   # Get system volume
   vol="$(osascript -e "get volume settings" | cut -d, -f1 | cut -d: -f2)"
   [[ "$vol" -ne 0 ]] && \
@@ -115,3 +123,4 @@ fi
 
 # Output to stdout
 [[ -z "$QUIET" ]] && echo "$output"
+
