@@ -56,11 +56,11 @@ WATCH[7]="Last Dog Watch"
 hour=${clock[0]}
 minute=${clock[1]}
 day=${clock[2]}
-bells=$(( $hour % 4 * 2 + $minute / 30 ))
-watch=$(( $hour / 4 ))
+bells=$(( 10#$hour % 4 * 2 + 10#$minute / 30 ))
+watch=$(( 10#$hour / 4 ))
 
 # Special case: eight bells, still previous watch
-[[ "$(( $hour % 4 + $minute ))" -eq 0 ]] && bells=8 \
+[[ "$(( 10#$hour % 4 + 10#$minute ))" -eq 0 ]] && bells=8 \
   && watch=$(( ($watch + 5) % 6 ))
 
 # Special case: New Year, ring eight bells twice
@@ -85,8 +85,8 @@ if [[ -n "$SHOW_BELLS" ]]; then
     output="${output}** "
   done
   [[ "$(( $bells % 2 ))" -ne 0 ]] && output="${output}*  "
-  for ((bell=8; bell>bells; bell-=2)); do
-    output="${output} "
+  for ((bell=7; bell>bells; bell-=2)); do
+    output="${output}   "
   done
 else
   output="$bells bells "
