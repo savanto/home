@@ -26,5 +26,6 @@ alias sudo='sudo '
 # apt-get
 alias agi='apt-get install --no-install-recommends'
 alias agu='apt-get upgrade'
+alias agv='apt-get update'
 alias acs='apt-cache search'
 alias act='apt-cache show'
