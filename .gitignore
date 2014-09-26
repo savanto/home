@@ -34,12 +34,14 @@
 .virtualenvs/
 
 # Home directories
+bin/
 devel/
 tmp/
 production/
 
 # Misc
 .cache/
+.config/
 .dbus/
 .fontconfig/
 .local/
