@@ -37,7 +37,7 @@
 bin/
 devel/
 tmp/
-production/
+prod/
 
 # Misc
 .cache/
