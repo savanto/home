@@ -27,6 +27,8 @@
 .gegl-0.0/
 .gimp-2.6/
 .john/
+.node-gyp/
+.npm/
 .pip/
 .pulse/
 .vbox/
