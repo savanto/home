@@ -404,6 +404,10 @@
     <mousebind button="A-S-Down" action="Click">
       <action name="SendToDesktop"><to>next</to></action>
     </mousebind>
+
+    <mousebind button="W-Right" action="Press">
+      <action name="ShowMenu"><menu>root-menu</menu></action>
+    </mousebind>
   </context>
 
   <!-- Titlebar - the window titlebar -->
