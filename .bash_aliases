@@ -30,3 +30,6 @@ alias agv='apt-get update'
 alias acs='apt-cache search'
 alias act='apt-cache show'
 alias acp='apt-cache policy'
+
+# sqlite3
+alias sqlite='sqlite3'
