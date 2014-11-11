@@ -1,0 +1,43 @@
+#!/bin/bash
+#
+# grind = grep + find
+#
+# `grep` for a given pattern in a list of files returned by `find`.
+
+usage() {
+  echo "grind = grep + find."
+  echo
+  echo "Usage: ${0##*/} PATTERN [PATH] [CONSTRAINTS...]"
+  echo
+  echo "Constraints:"
+  echo "  -path       exclude '*path*'"
+  echo "  +name       constrain to '*name*'"
+  echo "  .ext        constrain to '*.ext'"
+}
+
+[[ -z "$1" ]] && usage && exit 1
+PATTERN="$1"
+[[ -n "$2" ]] && DIR="$2" || DIR="./"
+shift 2 || shift 1
+
+for arg in "$@"; do
+  case "$arg" in
+    -*)
+      PRUNE="$PRUNE -not -path *${arg:1}* -and"
+      ;;
+    +*)
+      NAME="$NAME -name *${arg:1}* -o"
+      ;;
+    .*)
+      NAME="$NAME -name *$arg -o"
+      ;;
+    *)
+      # TODO ??
+      ;;
+  esac
+done
+
+[[ -n "$NAME" ]] && NAME="( $NAME -false )" || NAME="-true"
+
+set -f
+grep -nH --color=auto "$PATTERN" $(find $DIR $PRUNE $NAME)
