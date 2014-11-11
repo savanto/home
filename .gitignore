@@ -27,6 +27,7 @@
 .gegl-0.0/
 .ghc/
 .gimp-2.6/
+.gstreamer-0.10/
 .john/
 .mozilla/
 .node-gyp/
@@ -40,6 +41,7 @@
 # Home directories
 bin/
 devel/
+music/
 tmp/
 prod/
 
