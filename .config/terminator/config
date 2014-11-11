@@ -10,7 +10,7 @@
 [profiles]
   [[default]]
     scrollbar_position = hidden
-    palette = "#001621:#dc322f:#859900:#b58900:#268bd2:#d33682:#2aa198:#eee8d5:#002b36:#cb4b16:#586e75:#657b83:#839496:#6c71c4:#93a1a1:#fdf6e3"
+    palette = "#000000:#dc322f:#859900:#b58900:#268bd2:#d33682:#2aa198:#eee8d5:#002b36:#cb4b16:#586e75:#657b83:#839496:#6c71c4:#93a1a1:#fdf6e3"
     font = CosmicSansNeueMono 12
     scrollback_lines = 1000
     cursor_shape = underline
@@ -18,7 +18,7 @@
     cursor_color = "#eee8d5"
     foreground_color = "#eee8d5"
     copy_on_selection = True
-    background_color = "#001621"
+    background_color = "#000000"
     cursor_blink = False
 [layouts]
   [[default]]

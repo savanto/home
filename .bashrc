@@ -7,6 +7,9 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# 256 color terminal
+export TERM=xterm-256color
+
 # Do not write lines that begin with a space to the history list.
 # Do not write duplicate lines to the history list.
 # See bash(1) for info.

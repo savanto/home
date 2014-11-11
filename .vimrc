@@ -99,6 +99,7 @@ set viminfo='20,<50,s10,h,%
 
 " Display line numbers
 set number
+highlight LineNr ctermbg=233 guibg=#121212
 
 " Set extra options when in GUI mode
 if has("gui_running")
@@ -153,12 +154,12 @@ set shiftround
 "set linebreak
 " Textwidth for pasting (set to 0 anyway if paste is on)
 "set textwidth=500
-" Color 80th column if possible, or highlight lines that exceed 80 chars
+" Color 100th column if possible, or highlight lines that exceed 80 chars
 if exists('+colorcolumn')
-  set colorcolumn=80
-	hi ColorColumn ctermbg=cyan guibg=cyan
+  set colorcolumn=101
+	highlight ColorColumn ctermbg=233 guibg=#121212
 else
-  autocmd BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
+  autocmd BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>100v.\+', -1)
 endif
 
 
