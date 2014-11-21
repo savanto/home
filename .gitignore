@@ -10,8 +10,10 @@
 
 # Security
 .aws/
+.boto
 .ecryptfs
 .gnupg/
+.gsutil/
 .password-store/
 .pgpass
 .pki/
