@@ -67,6 +67,7 @@ case "$1" in
   gun)
     shift
     python manage.py auto_templated_problems --settings=auto_email_local_settings "$@"
+    rsync -rv --checksum ./static/email/auto_templated_problems/ static:~/email/auto_templated_problems/
     ;;
 
   *)
