@@ -86,32 +86,7 @@ case "$1" in
     ;;
 
   ### Custom aliases
-  anton)
-    REGID="APA91bH1pxoODb-SfkzdE9AN_R03-srlYPv2Vureppfin1gN02hBCv2C_4k9PAVzyod8w23yii2SPZJUpQpK3W0Lo5oSP6OuADrR1fztLBh5UQCZZyT1thMak4QGSDV0oErw4UcLqyHIfOJQidX3PSq4NLY8mvHJVg"
-    TITLE="Urgent problem"
-    TEXT="problem"
-    MESSAGE_TYPE="new_follower"
-#    MESSAGE_PRIORITY="urgent"
-#    LINK_URL="http://10.1.10.38:8080/community-problem/slow-hatchers/?group=sJAuNSP4lvEo"
-#    LINK_URL="https://brilliant.org/community-problem/a-quadratic-game/?group=C1ZOYdK0DdYz"
-    LINK_URL="https://brilliant.org/community-problem/locus-pocus/"
-    ;;
 
-  pete)
-    REGID="APA91bEm7f0gzJvWhARDo8nZ5MjrIj4YFasiBYdjzrmWkaquRx-uweO1bJaC6ZE5XgxDl0qU0Lhta-HQ0DRGwqP3LClrDLyp30Yve-t1MgMwjH260cSYcMalG4ftejRB0uouFXsjFGMOv7-D4n7rIMvUL6gjFhBJrA"
-    TITLE="Brilliant"
-    MESSAGE_TYPE="brilliant_squared"
-    TEXT="What to become a great problem solver?"
-    LINK_URL="https://brilliant.org/squared/?&utm_source=brilliant&utm_medium=push&utm_campaign=pushNUXSquared"
-    ;;
-
-  jeff)
-    REGID="APA91bGrps2Y99Bb3udXX1XrSspc9DkSaoL2UTf8Xse_LOhUpt3kx0ePYLoN3yEXxFQf6ycCNa7V6mLj7yjBcg4UWlbQbu5JwlUfDjHNheJsE1671-fl4eBubXtyd0BbMteXF1T2o3x8eicOv_K3_Wtuq7Dvnhigag"
-    TITLE="Test"
-    TEXT="Testing"
-    MESSAGE_TYPE="asdf"
-    LINK_URL="https://brilliant.org/community-problem/locus-pocus/"
-    ;;
 
   ### End custom aliases
   -*|"") # This will be handled by getopts below
