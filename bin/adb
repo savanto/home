@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# Wrapper for adb program in Android Developer Tools.
+# Extends some functionality of adb, and points to its location.
+
+# Location of adb binary
+ADB="${HOME}/devel/adt/sdk/platform-tools/adb"
+
+# Default uninstall package
+PACKAGE=org.brilliant.android
+
+
+if [[ ! -x "$ADB" ]]; then
+  echo "adb not found at $ADB" >&2
+  exit 1
+fi
+
+case "$1" in
+  # Take screenshot
+  screencap)
+    "$ADB" shell screencap -p | \
+      sed 's/\r$//' > "${2:-$(date +%Y-%m-%d-%H%M%S_adb.png)}"
+    ;;
+
+  # Uninstall default package
+  uninstall)
+    [[ -z "$2" ]] && "$ADB" uninstall "$PACKAGE" || "$ADB" "$@"
+    ;;
+
+  # Everything else
+  *)
+    "$ADB" "$@"
+    ;;
+esac
+

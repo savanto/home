@@ -1,0 +1,203 @@
+#!/bin/bash
+#
+# Send push notifications to phones via Google Cloud Messaging.
+#
+# Requirements:
+# - curl
+# - GCM sender id and API key in ~/.brilliant/gcm
+
+# Check that credentials are available.
+[[ -r ~/.brilliant/gcm ]] && source ~/.brilliant/gcm
+[[ -z "$GCM_SENDER_ID" || -z "$API_KEY" ]] \
+  && echo "Error: GCM credentials not found in ~/.brilliant/gcm" >&2 && exit 1
+
+# Check that curl is available
+if ! CURL="$(which curl)"; then
+  echo "Error: curl not found on PATH" >&2
+  exit 1
+fi
+
+# GCM defaults
+GCM_URL="https://android.googleapis.com/gcm/send"
+CONTENT_TYPE="application/json"
+
+# Push notification defaults. These will be used if not overwritten in an alias
+# or specified on the command line.
+#
+# Registered user device ID
+# This can be retrieved from Nexus.
+REGID=""
+
+# Notification title
+# This will appear in the Notification Bar.
+TITLE="Brilliant Push Notification"
+
+# Notification text
+# This will appear in the Notification Bar.
+TEXT="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+
+# Message type
+# Can be one of 'brilliant_squared', 'new_follower'; anything else defaults
+# to the latter.
+MESSAGE_TYPE="new_follower"
+
+# Message priority
+# Can be one of 'urgent', 'high', 'medium', 'low', 'regular'. Anything else
+# defaults to the latter.
+#
+# urgent  : turn on screen/interrupt user, show popup
+# high    : interrupt user, show popup
+# medium  : if screen off show popup, if screen on show notification
+# low     : do nothing
+# regular : show notification
+MESSAGE_PRIORITY="regular"
+
+# Image url
+# Url to image that should be loaded and serve as the icon in the Notification
+# Bar.
+PIC_URL=""
+
+# Page url
+# Url to the page that should be opened either in popup, or after the user
+# taps the notification.
+LINK_URL="https://brilliant.org/"
+
+# Campaign
+CAMPAIGN=""
+
+# Customer.io subject
+CUSTOMER_IO_SUBJECT=""
+
+
+# Aliases for quick testing
+#
+# Add aliases below. Set any variables to override the default values for the
+# push notification. Any variables you leave out of your alias will remain at
+# the default value.
+case "$1" in
+  # Example alias
+  example)
+    REGID="abcdefg1234567890"
+    TITLE="Example Push Notification"
+    TEXT="This is an example push notification."
+    MESSAGE_TYPE="new_follower"
+    MESSAGE_PRIORITY="regular"
+    LINK_URL="https://www.google.com"
+    ;;
+
+  ### Custom aliases
+  anton)
+    REGID="APA91bH1pxoODb-SfkzdE9AN_R03-srlYPv2Vureppfin1gN02hBCv2C_4k9PAVzyod8w23yii2SPZJUpQpK3W0Lo5oSP6OuADrR1fztLBh5UQCZZyT1thMak4QGSDV0oErw4UcLqyHIfOJQidX3PSq4NLY8mvHJVg"
+    TITLE="Urgent problem"
+    TEXT="problem"
+    MESSAGE_TYPE="new_follower"
+#    MESSAGE_PRIORITY="urgent"
+#    LINK_URL="http://10.1.10.38:8080/community-problem/slow-hatchers/?group=sJAuNSP4lvEo"
+#    LINK_URL="https://brilliant.org/community-problem/a-quadratic-game/?group=C1ZOYdK0DdYz"
+    LINK_URL="https://brilliant.org/community-problem/locus-pocus/"
+    ;;
+
+  pete)
+    REGID="APA91bEm7f0gzJvWhARDo8nZ5MjrIj4YFasiBYdjzrmWkaquRx-uweO1bJaC6ZE5XgxDl0qU0Lhta-HQ0DRGwqP3LClrDLyp30Yve-t1MgMwjH260cSYcMalG4ftejRB0uouFXsjFGMOv7-D4n7rIMvUL6gjFhBJrA"
+    TITLE="Brilliant"
+    MESSAGE_TYPE="brilliant_squared"
+    TEXT="What to become a great problem solver?"
+    LINK_URL="https://brilliant.org/squared/?&utm_source=brilliant&utm_medium=push&utm_campaign=pushNUXSquared"
+    ;;
+
+  jeff)
+    REGID="APA91bGrps2Y99Bb3udXX1XrSspc9DkSaoL2UTf8Xse_LOhUpt3kx0ePYLoN3yEXxFQf6ycCNa7V6mLj7yjBcg4UWlbQbu5JwlUfDjHNheJsE1671-fl4eBubXtyd0BbMteXF1T2o3x8eicOv_K3_Wtuq7Dvnhigag"
+    TITLE="Test"
+    TEXT="Testing"
+    MESSAGE_TYPE="asdf"
+    LINK_URL="https://brilliant.org/community-problem/locus-pocus/"
+    ;;
+
+  ### End custom aliases
+  -*|"") # This will be handled by getopts below
+    ;;
+
+  *)
+    echo "No such alias -- $1" >&2
+    exit 1
+    ;;
+esac
+
+
+### Begin script
+
+# Help
+usage() {
+  echo "Send push notification via Google Cloud Messaging."
+  echo "Usage: ${0##*/} [alias] [options]"
+  echo
+  echo "With no arguments, uses default values and sends push notification."
+  echo "With 'alias' supplied, uses values set in the alias."
+  echo "Further supplied options will override default/alias values."
+  echo
+  echo "Specifying device IDs:"
+  echo "  -r <device ID>"
+  echo "  -f <file with multiple device IDs, one per line>"
+  echo
+  echo "Notification options:"
+  echo "  -m <message type>"
+  echo "  -p <message priority>"
+  echo "  -c <campaign>"
+  echo "  -s <customer.io subject>"
+  echo
+  echo "User-visible options:"
+  echo "  -T <notification title>"
+  echo "  -M <notification text>"
+  echo "  -I <image url>"
+  echo "  -U <page url>"
+  echo
+  echo "Other:"
+  echo "  -h show this message and exit."
+}
+
+# Process inputs
+[[ "${1:0:1}" != "-" ]] && shift
+while getopts :r:f:m:p:c:s:T:M:I:U:h opt; do
+  case "$opt" in
+    r)  REGID="$OPTARG" ;;
+    f)  FILE="$OPTARG" ;;
+    m)  MESSAGE_TYPE="$OPTARG" ;;
+    p)  MESSAGE_PRIORITY="$OPTARG" ;;
+    c)  CAMPAIGN="$OPTARG" ;;
+    s)  CUSTOMER_IO_SUBJECT="$OPTARG" ;;
+    T)  TITLE="$OPTARG" ;;
+    M)  TEXT="$OPTARG" ;;
+    I)  PIC_URL="$OPTARG" ;;
+    U)  LINK_URL="$OPTARG" ;;
+    h)  usage && exit 0 ;;
+    :)  echo -e "Option $OPTARG requires argument\n" >&2 && usage && exit 1 ;;
+    ?)  echo -e "Invalid option $OPTARG\n" >&2 && usage && exit 1 ;;
+    *)  echo -e "Invalid option $opt\n" >&2 && usage && exit 1;;
+  esac
+done
+
+# Format REGID with quotes
+[[ -n "$REGID" ]] && REGID="\\\"${REGID}\\\""
+
+# If multiple REGIDs specified in file, append them.
+if [[ -n "$FILE" ]]; then
+  while read regid; do
+    [[ -n "$regid" ]] && REGID="\\\"${regid}\\\",${REGID}"
+  done < "$FILE"
+fi
+
+# Assemble curl command
+CURL="${CURL} --header \"Authorization: key=${API_KEY}\" --header \"Content-Type: ${CONTENT_TYPE}\""
+CURL="${CURL} ${GCM_URL}"
+CURL="${CURL} -d \"{\\\"data\\\":{"
+[[ -n "$TITLE" ]] && CURL="${CURL}\\\"title\\\":\\\"${TITLE}\\\","
+[[ -n "$TEXT" ]] && CURL="${CURL}\\\"text\\\":\\\"${TEXT}\\\","
+[[ -n "$PIC_URL" ]] && CURL="${CURL}\\\"picUrl\\\":\\\"${PIC_URL}\\\","
+[[ -n "$LINK_URL" ]] && CURL="${CURL}\\\"linkUrl\\\":\\\"${LINK_URL}\\\","
+[[ -n "$MESSAGE_TYPE" ]] && CURL="${CURL}\\\"messageType\\\":\\\"${MESSAGE_TYPE}\\\","
+[[ -n "$MESSAGE_PRIORITY" ]] && CURL="${CURL}\\\"messagePriority\\\":\\\"${MESSAGE_PRIORITY}\\\","
+CURL="${CURL}},\\\"registration_ids\\\":["${REGID}"]}\""
+
+# Execute curl command
+eval "$CURL"
+echo

@@ -1,0 +1,215 @@
+#!/bin/bash
+#
+# Script to update dev anon db from S3 bucket.
+#
+# Requires:
+# - awscli -- AWS commandline tools http://aws.amazon.com/cli/
+#   Install with `pip install awscli`
+# - IAM secret key with access to S3 bucket brilliant-data-scratch
+#   Configure with `aws configure`
+# - Superuser privileges on Postgresql:
+#   `sudo su postgres -c 'psql template1'`
+#   `CREATE USER <username> WITH SUPERUSER;`
+#   `\q`
+# - S3 URI info in ~/.brilliant/s3
+#
+
+# S3 bucket and object.
+# Command line: -b <bucket> -f <file>
+# These are loaded from ~/.brilliant/s3
+BUCKET=""
+DB_FILE=""
+# Check that S3 URI info is available.
+[[ -r ~/.brilliant/s3 ]] && source ~/.brilliant/s3
+[[ -z "$BUCKET" || -z "$DB_FILE" ]] \
+  && echo "Error: S3 URI info not found in ~/.brilliant/s3" >&2 && exit 1
+
+# Set up PATH
+PATH="/usr/local/bin:$PATH"
+
+# Set this to "yes" to have the script automatically install the synced anon db.
+# Otherwise, the script will only sync the db file from the S3 bucket and load
+# it into the temp db, but you will have to manually make the temp db live.
+# Command line: -I
+INSTALL_DB=no
+
+# Set this to "yes" to have the script force a sync, and then a load, of the
+# temp db, even if the sql file is up to date, and even if the temp db already
+# exists.
+# Command line: -F
+FORCE_LOAD=no
+
+# Directory to store anon db file. Make sure you use a directory that does not
+# get wiped periodically, or you will end up downloading and installing the
+# anon db needlessly.
+# Command line: -d <dir>
+LOCAL="${HOME}/tmp"
+
+# Local Postgresql databases to use.
+# Command line: -R <role> -M <db> -B <db> -T <db>
+DB_ROLE="brilliant"
+DB_MAIN="brilliant"
+DB_BACK="brilliant_backup"
+DB_TEMP="brilliant_temp"
+
+### Help and usage function
+usage() {
+  echo "Usage: ${0##*/} <command> [options]"
+  echo
+  echo "Commands:"
+  echo "  sync        Sync local copy of the anon db sql file with the copy"
+  echo "              from an Amazon S3 bucket, and load it into a temp"
+  echo "              Postgresql database."
+  echo "  install     Back up main database and make the temp database the"
+  echo "              main one."
+  echo "  rollback    Set the backup database as the main one."
+  echo
+  echo "Options with <sync>:"
+  echo "  -I          install newly updated anon db file as main database"
+  echo "  -F          force sync and loading of temp db"
+  echo "  -d dir      use 'dir' as local directory for storing anon db sql file"
+  echo "  -b bucket   use 'bucket' as S3 source bucket instead of default"
+  echo "  -f file     use 'file' as anon db sql file instead of default"
+  echo
+  echo "Options with <sync|install|rollback>:"
+  echo "  -R role     use 'role' as Postgresql anon db owner"
+  echo "  -M db       use 'db' as Postgresql main anon db name"
+  echo "  -B db       use 'db' as Postgresql backup anon db name"
+  echo "  -T db       use 'db' as Postgresql temp anon db name"
+  echo
+  echo "Other options:"
+  echo "  -h          show this help and exit"
+  echo
+  echo "Current settings:"
+  echo "  Local dir:    $LOCAL"
+  echo "  S3 bucket:    $BUCKET"
+  echo "  Anon DB file: $DB_FILE"
+  echo "  DB owner:     $DB_ROLE"
+  echo "  Main DB:      $DB_MAIN"
+  echo "  Backup DB:    $DB_BACK"
+  echo "  Temp DB:      $DB_TEMP"
+  echo "  Auto install: $INSTALL_DB"
+  echo "  Force load:   $FORCE_LOAD"
+}
+
+### Print error and exit
+error() {
+  echo "Error: $@" >&2
+  exit 1
+}
+
+### Sync with S3 and load into temp db
+sync() {
+  echo "Syncing s3://${BUCKET}/${DB_FILE} ..."
+  mkdir -p ${LOCAL} || error "Unable to write to ${LOCAL}"
+
+  # Check connection to S3
+  aws s3 ls s3://${BUCKET} > /dev/null \
+    || error "Unable to connect to s3://${BUCKET}"
+
+  # Check whether db file is out of sync
+  if ! aws s3 sync s3://${BUCKET} ${LOCAL} --exclude "*" \
+    --include "${DB_FILE}" --dryrun | grep -q "download:"
+  then
+    echo "Anon db already up to date."
+    [[ "${FORCE_LOAD}" != "yes" ]] && exit 0
+  fi
+
+  # Sync db file
+  aws s3 sync s3://${BUCKET} ${LOCAL} --exclude "*" --include "${DB_FILE}" \
+    || error "Unable to sync with s3://${BUCKET}/${DB_FILE}"
+
+  # Create temp db from the synced anon db file
+  echo "Creating ${DB_TEMP} ..."
+  dropdb ${DB_TEMP} > /dev/null 2>&1
+  createdb -O ${DB_ROLE} ${DB_TEMP} || error "Unable to create ${DB_TEMP}"
+  gunzip -c ${LOCAL}/${DB_FILE} | psql ${DB_TEMP} \
+    || error "Unable to load ${DB_FILE} into ${DB_TEMP}"
+
+  echo "Anon db synced."
+}
+
+### Install -- backup main db and set temp db as main db
+install() {
+  # Check that temp db exists
+  psql -lqt | cut -d \| -f 1 | grep -wq "${DB_TEMP}" \
+    || error "${DB_TEMP} does not exist."
+
+  # Rename main db to backup db
+  if psql -lqt | cut -d \| -f 1 | grep -wq "${DB_MAIN}"; then
+    echo "Backing up ${DB_MAIN} ..."
+    dropdb ${DB_BACK} > /dev/null 2>&1
+    echo "ALTER DATABASE ${DB_MAIN} RENAME TO ${DB_BACK};" | psql template1 \
+      || error "Unable to backup ${DB_MAIN}"
+  fi
+
+  # Rename temp db to main db
+  echo "Installing ${DB_TEMP} ..."
+  echo "ALTER DATABASE ${DB_TEMP} RENAME TO ${DB_MAIN};" | psql template1 \
+    || error "Unable to install ${DB_TEMP}"
+
+  echo "Anon db installed."
+}
+
+### Rollback -- set backup db as main db
+rollback() {
+  # Check that backup db exists
+  psql -lqt | cut -d \| -f 1 | grep -wq "${DB_BACK}" \
+    || error "${DB_BACK} does not exist."
+
+  # Rename backup db to main db
+  echo "Rolling back ${DB_MAIN} ..."
+  dropdb ${DB_MAIN} > /dev/null 2>&1
+  echo "ALTER DATABASE ${DB_BACK} RENAME TO ${DB_MAIN};" | psql template1 \
+    || error "Unable to rollback ${DB_MAIN}"
+
+  echo "${DB_MAIN} restored from ${DB_BACK}."
+}
+
+### Check that all required binaries are on the PATH
+for dep in aws psql dropdb createdb gunzip; do
+  which ${dep} > /dev/null || error "${dep} not found on PATH."
+done
+
+### Process command
+command="$1"
+shift
+
+### Process options
+while getopts :IFd:b:f:R:M:B:T:h opt; do
+  case "$opt" in
+    I)  INSTALL_DB=yes ;;
+    F)  FORCE_LOAD=yes ;;
+    d)  LOCAL="$OPTARG" ;;
+    b)  BUCKET="$OPTARG" ;;
+    f)  DB_FILE="$OPTARG" ;;
+    R)  DB_ROLE="$OPTARG" ;;
+    M)  DB_MAIN="$OPTARG" ;;
+    B)  DB_BACK="$OPTARG" ;;
+    T)  DB_TEMP="$OPTARG" ;;
+    h)  usage && exit 0 ;;
+    :)  echo -e "Option $OPTARG requires argument\n" >&2 && usage && exit 1 ;;
+    ?)  echo -e "Invalid option $OPTARG\n" >&2 && usage && exit 1 ;;
+    *)  echo -e "Invalid option $opt\n" >&2 && usage && exit 1;;
+  esac
+done
+
+case "$command" in
+  sync)
+    sync
+    [[ "$INSTALL_DB" == "yes" ]] && install
+    ;;
+
+  install)
+    install
+    ;;
+
+  rollback)
+    rollback
+    ;;
+
+  *)
+    usage
+    ;;
+esac
+

@@ -11,6 +11,7 @@
 # Security
 .aws/
 .boto
+.brilliant/
 .ecryptfs
 .gnupg/
 .gsutil/
@@ -41,7 +42,6 @@
 .virtualenvs/
 
 # Home directories
-bin/
 devel/
 music/
 tmp/

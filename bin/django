@@ -1,0 +1,83 @@
+#!/bin/bash
+#
+# Wrapper for Django's manage.py script.
+# Enters the appropriate directory and virtual env before running
+# manage.py commands.
+#
+
+# Path to virtualenvwrapper functions.
+VIRTUALENVWRAPPER="/etc/bash_completion.d/virtualenvwrapper"
+
+# The virtual env to enter before running Django.
+VIRTUALENV="brilliant"
+
+# Location of the Django server.
+SERVER_DIR="${HOME}/devel/brilliant"
+
+# Location of js build files
+BUILD_DIR="${SERVER_DIR}/build_frontend"
+
+# Location of gulp
+GULP="${BUILD_DIR}/node_modules/gulp/bin/gulp.js"
+GULP_FILE="${BUILD_DIR}/gulpfile.js"
+
+# IP address on which the Django server should listen.
+LISTEN_IP="10.1.10.38:8080"
+
+
+# Gulp wrapper
+gulp () {
+  if [[ -x "$GULP" ]]; then
+    "$GULP" "$@" --gulpfile "$GULP_FILE"
+  else
+    echo "Skipping gulp, it was not found at $GULP"
+  fi
+}
+
+
+# Add the virtualenvwrapper functions to the shell.
+[[ -f "$VIRTUALENVWRAPPER" ]] && . "$VIRTUALENVWRAPPER" || exit 1
+
+# Enter the directory with the server, and the virtual env.
+pushd "$SERVER_DIR"
+workon "$VIRTUALENV"
+
+# Start the server with the appropriate command
+case "$1" in
+  runserver)
+    gulp watch --dev &
+    python manage.py "$1" "${2:-$LISTEN_IP}"
+    ;;
+
+  gulp)
+    shift
+    gulp "$@"
+    ;;
+
+  updatedb)
+    python manage.py syncdb
+    python manage.py migrate
+    ;;
+
+  spreadsheet)
+    python manage.py content_reengagement --settings=auto_email_local_settings --update-spreadsheet
+    rsync -rv --checksum ./static/email/content_reengagement/ static:~/email/content_reengagement/
+    ;;
+
+  gun)
+    shift
+    python manage.py auto_templated_problems --settings=auto_email_local_settings "$@"
+    ;;
+
+  *)
+    python manage.py "$@"
+    ;;
+esac
+
+# ...
+# process running
+# ...
+
+# Return to starting directory.
+deactivate
+popd

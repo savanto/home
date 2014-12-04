@@ -1,0 +1,36 @@
+#! /bin/bash
+
+
+IFACE=eth0
+SPEED=500kbps
+DELAY=300ms
+
+
+case "$1" in
+  start)
+    tc qdisc add dev eth0 root handle 1: htb default 12
+    tc class add dev eth0 parent 1:1 classid 1:12 htb rate $SPEED ceil $SPEED
+    tc qdisc add dev eth0 parent 1:12 netem delay $DELAY
+    tc -s qdisc ls dev $IFACE
+  ;;
+
+  stop)
+    tc qdisc del dev $IFACE root
+    tc -s qdisc ls dev $IFACE
+  ;;
+
+  show)
+    tc -s qdisc ls dev $IFACE
+  ;;
+
+  *)
+    echo "Usage: ${0##*/} <command>"
+    echo
+    echo "Commands:"
+    echo "  start     add a $DELAY delay and limit the speed to $SPEED"
+    echo "  stop      stop slow net"
+    echo "  show      show current traffic control settings"
+    echo
+  ;;
+esac
+

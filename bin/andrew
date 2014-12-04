@@ -1,0 +1,111 @@
+#!/usr/bin/env python
+
+"""
+andrew -- ANDroid REvieWs
+Slack webhook integration to retrieve Google Play Store Android reviews from a Google Cloud Storage
+bucket and post them to a Slack channel.
+
+Requirements:
+  - boto and properly configured ~/.boto file (see https://cloud.google.com/storage/docs/gspythonlibrary)
+  - GS credentials, URI info, and Slack webhook URL in ~/.brilliant/gs.py
+
+Usage: andrew [ CHANNEL ]
+"""
+
+import boto
+import gcs_oauth2_boto_plugin
+from cStringIO import StringIO
+from datetime import date, datetime, timedelta
+import csv
+import requests
+import json
+import sys
+import os
+
+# Import secret GS and Slack credentials and info from ~/.brilliant/gs.py
+sys.path.append("%s/.brilliant" % os.path.expanduser('~'))
+import gs
+
+GS_URI = gs.GS_BUCKET + "/reviews/reviews_org.brilliant.android_%s.csv"
+CHANNEL = sys.argv[1] if len(sys.argv) > 1 else "#product-bots"
+
+TS = 7
+STARS = 8
+TITLE = 9
+TEXT = 10
+LINK = -1
+
+STAR = '\u2605'
+
+
+class Review(object):
+    def __init__(self, ts, stars, title, text, link):
+        self.ts = datetime.fromtimestamp(int(ts[:-3]))
+        self.stars = int(stars)
+        self.title = "*%s* " % title if title else ""
+        self.text = text
+        self.link = link
+
+    def __str__(self):
+        return "<%s|%s> %s%s" % (
+            self.link,
+            unicode(STAR * self.stars, 'unicode_escape').encode('utf8'),
+            self.title,
+            self.text,
+        )
+
+
+def get_records(date):
+    """
+    Get review file from Google Storage. File is identified by the `date` string, which is in the
+    format "YYYYMM".
+
+    Return list of records to be parsed by csv.
+    """
+    uri = boto.storage_uri(GS_URI % date, 'gs')
+    file = StringIO()
+    try:
+        uri.get_key().get_file(file)
+    except boto.exception.InvalidUriError:
+        # Attempted to get non-existent reviews file.
+        return []
+    lines = [ line.decode('utf16').encode('utf8') for line in file.getvalue()[2:].split('\n\x00') ]
+    return lines[1:] # Remove column headers.
+
+
+gcs_oauth2_boto_plugin.SetFallbackClientIdAndSecret(gs.CLIENT_ID, gs.CLIENT_SECRET)
+
+# Get reviews from last week.
+today = date.today()
+last_week = today - timedelta(days=7)
+records = get_records(last_week.strftime("%Y%m"))
+
+if today.month != last_week.month:
+    # Week falls on month boundary, so get current month's file too.
+    records.extend(get_records(today.strftime("%Y%m")))
+
+# Get ratings and reviews whose timestamp > last week.
+last_week_ts = int(last_week.strftime("%s")) * 1000
+ratings = [0] * 5
+reviews = []
+for record in csv.reader(records):
+    if record and int(record[TS]) > last_week_ts:
+        ratings[int(record[STARS])-1] += 1
+        if record[TITLE] or record[TEXT]:
+            reviews.append(str(Review(*record[TS:TEXT+1], link=record[LINK])))
+
+ratings = [
+    "%s %s" % (
+        unicode(STAR * s, 'unicode_escape').encode('utf8').rjust(s * 2 + 5),
+        ratings[s-1],
+    ) for s in xrange(5, 0, -1)
+]
+
+payload = {
+    "channel": CHANNEL,
+    "text": "*Android reviews from the past week*:\n\n%s\n\n*Ratings summary*:\n```\n%s\n```" % (
+                '\n'.join(reviews), '\n'.join(ratings)
+            ),
+}
+
+r = requests.post(gs.SLACK_WEBHOOK_URL, data=json.dumps(payload))
