@@ -94,6 +94,8 @@ for record in csv.reader(records):
         if record[TITLE] or record[TEXT]:
             reviews.append(str(Review(*record[TS:TEXT+1], link=record[LINK])))
 
+average = sum(s * ratings[s-1] for s in xrange(5, 0, -1)) / float(sum(ratings))
+
 ratings = [
     "%s %s" % (
         unicode(STAR * s, 'unicode_escape').encode('utf8').rjust(s * 2 + 5),
@@ -101,11 +103,13 @@ ratings = [
     ) for s in xrange(5, 0, -1)
 ]
 
+text = "*Android reviews from the past week*:\n\n%s\n\n*Ratings summary: %.2f*\n```\n%s\n```" % (
+    '\n'.join(reviews), average, '\n'.join(ratings)
+)
+
 payload = {
     "channel": CHANNEL,
-    "text": "*Android reviews from the past week*:\n\n%s\n\n*Ratings summary*:\n```\n%s\n```" % (
-                '\n'.join(reviews), '\n'.join(ratings)
-            ),
+    "text": text,
 }
 
 r = requests.post(gs.SLACK_WEBHOOK_URL, data=json.dumps(payload))
