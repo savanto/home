@@ -40,4 +40,4 @@ done
 [[ -n "$NAME" ]] && NAME="( $NAME -false )" || NAME="-true"
 
 set -f
-grep -nH --color=auto "$PATTERN" $(find $DIR $PRUNE $NAME)
+find $DIR $PRUNE $NAME -exec grep -nH --color=auto "$PATTERN" {} +
