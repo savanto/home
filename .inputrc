@@ -1,0 +1,57 @@
+#
+# ~/.inputrc
+#
+# Custom init file for Readline (libreadline).
+# See readline(3readline) and `info rluserman` and /etc/inputrc for more info.
+# Online manual at
+# http://www.gnu.org/software/bash/manual/bashref.html#Readline-Init-File-Syntax
+
+# Disable bell.
+set bell-style none
+
+# Use the vi editing mode.
+set editing-mode vi
+# Use the emacs editing mode.
+#set editing-mode emacs
+
+# Be 8 bit clean.
+set input-meta on
+set output-meta on
+
+# Mark completed names of directories with an appended slash.
+set mark-directories on
+set mark-symlinked-directories on
+
+# When performing completion in the middle of a word, and there is only a single
+# match, do not duplicate portions of the completed word, but keep the
+# characters that are already on the line.
+set skip-completed-text on
+
+# Mark possible completions with a character denoting the file type.
+set visible-stats on
+
+# Custom bindings for vi mode.
+# Custom bindings in insertion mode.
+set keymap vi-insert
+# Ctrl-Left/Right moves between words.
+"\e[1;5C": forward-word
+"\e[1;5D": backward-word
+# Insert key inserts a quoted control character.
+"\e[2~": quoted-insert
+# History search for given prefix.
+"\e[1;5A": history-search-backward
+"\e[1;5B": history-search-forward
+
+# Custom bindings in command mode.
+set keymap vi-command
+# Ctrl-Left/Right moves between words.
+"\e[1;5C": forward-word
+"\e[1;5D": backward-word
+# History search for given prefix.
+"\e[1;5A": history-search-backward
+"\e[1;5B": history-search-forward
+# Quote current or previous word.
+"\"": "Bi\"\eWa\""
+"'": "Bi'\eWa'"
+# Clear commandline.
+"\e\e": "0C"
