@@ -32,6 +32,7 @@ BLUE='\[\033[00;34m\]'
 GREEN='\[\033[00;32m\]'
 RESET='\[\033[00m\]'
 PS1="${GREEN}\u@\h${RESET}:${BLUE}\w${GREEN}\$${RESET} "
+PROMPT_DIRTRIM=3
 unset BLUE GREEN RESET
 
 # Set the colors used by ls. See dircolors(1) for options and fine-tuning.
