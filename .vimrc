@@ -154,12 +154,12 @@ set shiftround
 "set linebreak
 " Textwidth for pasting (set to 0 anyway if paste is on)
 "set textwidth=500
-" Color 100th column if possible, or highlight lines that exceed 80 chars
+" Color 80th and 100th columns if possible.
 if exists('+colorcolumn')
-  set colorcolumn=101
+  set colorcolumn=81,101
 	highlight ColorColumn ctermbg=233 guibg=#121212
-else
-  autocmd BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>100v.\+', -1)
+"else
+"  autocmd BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>100v.\+', -1)
 endif
 
 
