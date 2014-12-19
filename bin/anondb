@@ -60,18 +60,19 @@ usage() {
   echo "  sync        Sync local copy of the anon db sql file with the copy"
   echo "              from an Amazon S3 bucket, and load it into a temp"
   echo "              Postgresql database."
+  echo "  load        Load anon db file into temp db without syncing."
   echo "  install     Back up main database and make the temp database the"
   echo "              main one."
   echo "  rollback    Set the backup database as the main one."
   echo
-  echo "Options with <sync>:"
+  echo "Options with <sync|load>:"
   echo "  -I          install newly updated anon db file as main database"
   echo "  -F          force sync and loading of temp db"
   echo "  -d dir      use 'dir' as local directory for storing anon db sql file"
   echo "  -b bucket   use 'bucket' as S3 source bucket instead of default"
   echo "  -f file     use 'file' as anon db sql file instead of default"
   echo
-  echo "Options with <sync|install|rollback>:"
+  echo "Options with <sync|load|install|rollback>:"
   echo "  -R role     use 'role' as Postgresql anon db owner"
   echo "  -M db       use 'db' as Postgresql main anon db name"
   echo "  -B db       use 'db' as Postgresql backup anon db name"
@@ -98,7 +99,7 @@ error() {
   exit 1
 }
 
-### Sync with S3 and load into temp db
+### Sync with S3
 sync() {
   echo "Syncing s3://${BUCKET}/${DB_FILE} ..."
   mkdir -p ${LOCAL} || error "Unable to write to ${LOCAL}"
@@ -119,6 +120,11 @@ sync() {
   aws s3 sync s3://${BUCKET} ${LOCAL} --exclude "*" --include "${DB_FILE}" \
     || error "Unable to sync with s3://${BUCKET}/${DB_FILE}"
 
+  echo "Anon db synced."
+}
+
+### Load into temp db
+load() {
   # Create temp db from the synced anon db file
   echo "Creating ${DB_TEMP} ..."
   dropdb ${DB_TEMP} > /dev/null 2>&1
@@ -126,7 +132,7 @@ sync() {
   gunzip -c ${LOCAL}/${DB_FILE} | psql ${DB_TEMP} \
     || error "Unable to load ${DB_FILE} into ${DB_TEMP}"
 
-  echo "Anon db synced."
+  echo "Anon db loaded into ${DB_TEMP}."
 }
 
 ### Install -- backup main db and set temp db as main db
@@ -197,6 +203,12 @@ done
 case "$command" in
   sync)
     sync
+    load
+    [[ "$INSTALL_DB" == "yes" ]] && install
+    ;;
+
+  load)
+    load
     [[ "$INSTALL_DB" == "yes" ]] && install
     ;;
 
