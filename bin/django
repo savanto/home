@@ -35,12 +35,14 @@ gulp () {
 }
 
 
-# Add the virtualenvwrapper functions to the shell.
-[[ -f "$VIRTUALENVWRAPPER" ]] && . "$VIRTUALENVWRAPPER" || exit 1
-
 # Enter the directory with the server, and the virtual env.
 pushd "$SERVER_DIR"
-workon "$VIRTUALENV"
+if [[ -z "$VIRTUAL_ENV" ]]; then
+  # Add the virtualenvwrapper functions to the shell.
+  [[ -f "$VIRTUALENVWRAPPER" ]] && . "$VIRTUALENVWRAPPER" || exit 1
+  workon "$VIRTUALENV"
+  WORKON=1
+fi
 
 # Start the server with the appropriate command
 case "$1" in
@@ -61,13 +63,13 @@ case "$1" in
 
   spreadsheet)
     python manage.py content_reengagement --settings=auto_email_local_settings --update-spreadsheet
-    rsync -rv --checksum ./static/email/content_reengagement/ static:~/email/content_reengagement/
+#    rsync -rv --checksum ./static/email/content_reengagement/ static:~/email/content_reengagement/
     ;;
 
   gun)
     shift
     python manage.py auto_templated_problems --settings=auto_email_local_settings "$@"
-    rsync -rv --checksum ./static/email/auto_templated_problems/ static:~/email/auto_templated_problems/
+#    rsync -rv --checksum ./static/email/auto_templated_problems/ static:~/email/auto_templated_problems/
     ;;
 
   *)
@@ -80,5 +82,5 @@ esac
 # ...
 
 # Return to starting directory.
-deactivate
+[[ -n "$WORKON" ]] && deactivate
 popd
