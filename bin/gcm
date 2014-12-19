@@ -37,20 +37,11 @@ TITLE="Brilliant Push Notification"
 TEXT="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 
 # Message type
-# Can be one of 'brilliant_squared', 'new_follower'; anything else defaults
-# to the latter.
+# Can be one of 'brilliant_squared', 'new_problem', 'new_follower';
+# anything else defaults to the latter.
 MESSAGE_TYPE="new_follower"
 
-# Message priority
-# Can be one of 'urgent', 'high', 'medium', 'low', 'regular'. Anything else
-# defaults to the latter.
-#
-# urgent  : turn on screen/interrupt user, show popup
-# high    : interrupt user, show popup
-# medium  : if screen off show popup, if screen on show notification
-# low     : do nothing
-# regular : show notification
-MESSAGE_PRIORITY="regular"
+POPUP="true"
 
 # Image url
 # Url to image that should be loaded and serve as the icon in the Notification
@@ -101,14 +92,6 @@ case "$1" in
     MESSAGE_TYPE="brilliant_squared"
     TEXT="What to become a great problem solver?"
     LINK_URL="https://brilliant.org/squared/?&utm_source=brilliant&utm_medium=push&utm_campaign=pushNUXSquared"
-    ;;
-
-  jeff)
-    regid jeff
-    TITLE="Test"
-    TEXT="Testing"
-    MESSAGE_TYPE="asdf"
-    LINK_URL="https://brilliant.org/community-problem/locus-pocus/"
     ;;
 
   ### End custom aliases
