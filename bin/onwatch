@@ -64,8 +64,8 @@ watch=$(( 10#$hour / 4 ))
   && watch=$(( ($watch + 5) % 6 ))
 
 # Special case: New Year, ring eight bells twice
-[[ "$day" -eq 1 ]] && [[ "$hour" -eq 0 ]] && [[ "$minute" -eq 0 ]] \
-  && bells=16
+[[ "$(( 10#$day ))" -eq 1 ]] && [[ "$(( 10#$hour ))" -eq 0 ]] \
+  && [[ "$(( 10#$minute ))" -eq 0 ]] && bells=16
 
 # Special case: post-Nore mutiny style Dog watches
 if [[ "$watch" -eq 4 ]] && [[ -n "$NORE" ]]; then
