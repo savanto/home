@@ -33,3 +33,6 @@ alias acp='apt-cache policy'
 
 # sqlite3
 alias sqlite='sqlite3'
+
+# ps aux
+alias psaux='ps aux | grep'
