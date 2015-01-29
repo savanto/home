@@ -17,6 +17,11 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
+# ack
+alias pack='ack --python'
+alias xack='ack --xml'
+alias jack='ack --java'
+
 # dmesg
 alias dmesg='dmesg --color=auto'
 
