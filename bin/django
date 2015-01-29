@@ -62,14 +62,18 @@ case "$1" in
     ;;
 
   spreadsheet)
+    branch=$(git rev-parse --abbrev-ref HEAD)
+    git checkout spreadsheet-before-it-broke
     python manage.py content_reengagement --settings=auto_email_local_settings --update-spreadsheet
-#    rsync -rv --checksum ./static/email/content_reengagement/ static:~/email/content_reengagement/
+    read -p "Hit Enter to rsync "
+    rsync -rv static/email/content-reengagement/ static:~/email/content-reengagement/
+    git checkout $branch
     ;;
 
   gun)
     shift
     python manage.py auto_templated_problems --settings=auto_email_local_settings "$@"
-#    rsync -rv --checksum ./static/email/auto_templated_problems/ static:~/email/auto_templated_problems/
+#    rsync -rv --checksum ./static/email/auto-templated-problems/ static:~/email/auto-templated-problems/
     ;;
 
   *)
