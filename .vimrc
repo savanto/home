@@ -128,6 +128,9 @@ set encoding=utf8
 " Use Unix as standard file type
 set ffs=unix,dos,mac
 
+" Set Brilliant template files to be django-html files
+autocmd BufRead,BufNewFile ~/devel/brilliant/templates/* set syntax=htmldjango
+
 
 " INDENTING, TABS, LINES
 " ---------  ----  -----
