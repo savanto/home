@@ -18,3 +18,9 @@ setxkbmap -model pc105 -layout us,ru -option grp:shifts_toggle
 
 # invoke global X session script
 . /etc/X11/Xsession
+
+# Set wallpaper
+[[ -e ~/.wallpaper ]] \
+  && which qiv 2>/dev/null \
+  && qiv -x "$(ls -1 ~/.wallpaper | sort -R | head -1)"
+
