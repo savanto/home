@@ -1,0 +1,100 @@
+#!/bin/bash
+
+set -e
+
+
+### Dependencies
+DEPS="ant git sed grep"
+for dep in $DEPS; do
+  which $dep >/dev/null || { echo "Error: '$dep' not found on PATH."; exit 1; }
+done
+
+
+### Defaults
+# Use the 'master' branch by default.
+BRANCH=production
+
+# Pull from master branch in origin repo before building.
+PULL=master
+
+# Location of the production environment.
+PROD=$HOME/prod
+
+# Location of the project repo.
+PROJECT_DIR=$PROD/BrilliantAndroidClient
+
+# Location of New Relic lib used during build.
+NR_CLASS_REWRITER=$PROJECT_DIR/local/class.rewriter.jar
+
+# Location to put the build APK.
+BUILD_DIR=$PROD/builds
+
+# Default `ant` target is 'release'
+ANT_TGT=release
+
+### Get secrets.
+source ~/.brilliant/android 2>/dev/null || :
+
+
+### Help
+_usage() {
+  echo "Usage:"
+}
+
+
+### Perform the build with `ant`
+_ant_release() {
+  # Switch to appropriate branch and update repo.
+  git branch $BRANCH 2>/dev/null || :
+  git checkout $BRANCH
+  [[ -n "$PULL" ]] && git pull origin $PULL
+
+  # Update app version.
+#  if [[ -n "$1" ]]; then
+#    VERSION="$1"
+#  else
+#    VERSION="$(
+#    sed -r "s/(android:versionName=\")[^\"]*/\1$1/" AndroidManifest.xml | head
+#    
+#  fi
+#  # Check final location before overwriting.
+#  [[ -z "$FORCE" ]] && [[ -e "$BUILD_DIR/" ]]
+
+
+  # Build with ant.
+  rm -rf bin/ gen/
+  export ANT_OPTS="-javaagent:$NR_CLASS_REWRITER"
+  ant $ANT_TGT
+
+  # TODO publish to Google Play
+  # TODO make tag
+  # TODO publish to Github
+
+  # TODO mv to build dir
+  mkdir -p $BUILD_DIR/test
+  cp -v bin/Brilliant-release.apk $BUILD_DIR/test
+}
+
+
+### Process options
+while getopts b:fmp:ABC:Dh opt; do
+  case "$opt" in
+    b) BRANCH="$OPTARG" ;; # Use test branch instead of master
+    f) FORCE=yes ;; # Force overwrite of APK
+    m) unset PULL ;; # Do not pull from repo
+    p) PULL="$OPTARG" ;; # Pull given branch from repo
+    A) RELEASE=alpha ;; # Release level alpha
+    B) RELEASE=beta ;; # Release level beta
+    C) RELEASE="$OPTARG" ;; # Custom release level
+    D) RELEASE=debug ; ANT_TGT=debug ;; # Release level debug
+    h) _usage && exit 0 ;; # Help
+    *) echo -e "Invalid option '$opt'\n" >&2 && _usage && exit 1 ;;
+  esac
+done
+
+shift $((OPTIND-1))
+
+pushd $PROJECT_DIR/Brilliant
+_ant_release $@
+popd
+
