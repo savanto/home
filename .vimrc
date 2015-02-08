@@ -85,6 +85,8 @@ set tm=500
 
 " Update window title
 set title
+set titleold=""
+set titlestring=VIM:\ %F
 
 " Display current command
 set showcmd
@@ -97,6 +99,7 @@ set viminfo='20,<50,s10,h,%
 
 " Display line numbers
 set number
+highlight LineNr ctermbg=233 guibg=#121212
 
 " Set extra options when in GUI mode
 if has("gui_running")
@@ -116,8 +119,8 @@ set ofu=syntaxcomplete#Complete
 syntax enable
 " Set colorscheme
 set background=dark
-colorscheme slate
-"colorscheme solarized
+"colorscheme slate
+colorscheme solarized
 
 " Set encoding
 set encoding=utf8
@@ -151,11 +154,12 @@ set shiftround
 "set linebreak
 " Textwidth for pasting (set to 0 anyway if paste is on)
 "set textwidth=500
-" Color 80th column if possible, or highlight lines that exceed 80 chars
+" Color 80th and 100th columns if possible.
 if exists('+colorcolumn')
-  set colorcolumn=80
-else
-  autocmd BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
+  set colorcolumn=81,101
+	highlight ColorColumn ctermbg=233 guibg=#121212
+"else
+"  autocmd BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>100v.\+', -1)
 endif
 
 

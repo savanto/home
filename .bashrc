@@ -7,6 +7,9 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# 256 color terminal
+export TERM=xterm-256color
+
 # Do not write lines that begin with a space to the history list.
 # Do not write duplicate lines to the history list.
 # See bash(1) for info.
@@ -29,10 +32,20 @@ BLUE='\[\033[00;34m\]'
 GREEN='\[\033[00;32m\]'
 RESET='\[\033[00m\]'
 PS1="${GREEN}\u@\h${RESET}:${BLUE}\w${GREEN}\$${RESET} "
+PROMPT_DIRTRIM=3
 unset BLUE GREEN RESET
 
 # Set the colors used by ls. See dircolors(1) for options and fine-tuning.
-eval "$(dircolors --sh)"
+[[ -f "${HOME}/.dircolors" ]] && DIRCOLORS="${HOME}/.dircolors"
+eval "$(dircolors --sh $DIRCOLORS)"
 
 # Source alias definitions.
 [[ -f "${HOME}/.bash_aliases" ]] && . "${HOME}/.bash_aliases"
+
+# Enable bash completion in interactive shells.
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+    . /etc/bash_completion
+fi
+
+# Set default editor
+export EDITOR=/usr/bin/vim

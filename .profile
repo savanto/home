@@ -16,8 +16,6 @@
 # packages are installed by hand, they should go under /usr/local and the
 # following locations added to the PATH.
 #
-# Clear PATH
-PATH=
 # Host-specific command binaries
 PATH="/usr/local/bin"
 # Host-specific system binaries
@@ -34,4 +32,13 @@ PATH="${PATH}:/bin"
 PATH="${PATH}:/sbin"
 
 # Prepend personal bin directory to PATH if it exists
-if [[ -d "${HOME}/bin" ]]; then PATH="${HOME}/bin:${PATH}"; fi
+[ -d "${HOME}/bin" ] && PATH="${HOME}/bin:${PATH}"
+
+# Start ssh-agent
+[[ -z "$SSH_AGENT_PID" ]] && eval $(/usr/bin/ssh-agent -s)
+
+# Automatically start x when logging in on tty6
+if [[ -z "$DISPLAY" ]] && [[ $(/usr/bin/tty) = /dev/tty6 ]]; then
+  /usr/bin/startx
+  logout
+fi

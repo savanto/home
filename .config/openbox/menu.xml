@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openbox_menu xmlns="http://openbox.org/"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://openbox.org/
+                file:///usr/share/openbox/menu.xsd">
+
+<menu id="root-menu" label="Openbox 3">
+  <!-- Applications launched form the menu -->
+  <item label="terminal">
+    <action name="Execute"><execute>x-terminal-emulator</execute></action>
+  </item>
+  <item label="browser">
+    <action name="Execute"><execute>x-www-browser</execute></action>
+  </item>
+  <item label="eclipse">
+    <action name="Execute"><execute>~/devel/adt/eclipse/eclipse</execute></action>
+  </item>
+  <item label="gimp">
+    <action name="Execute"><execute>gimp</execute></action>
+  </item>
+  <separator />
+
+  <!-- Clock -->
+  <menu id="time" label="time" execute="~/.config/openbox/time.sh" />
+  <menu id="watch" label="watch" execute="~/.config/openbox/onwatch.sh" />
+
+  <!-- Desktops -->
+  <menu id="client-list-menu" />
+  <separator />
+
+  <!-- Reconfigure openbox -->
+  <item label="reconfigure">
+    <action name="Reconfigure" />
+  </item>
+
+  <!-- Workspace actions -->
+  <item label="restart">
+    <action name="Restart" />
+  </item>
+  <item label="exit">
+    <action name="Exit" />
+  </item>
+  <item label="lock">
+    <action name="Execute"><execute>slock</execute></action>
+  </item>
+</menu>
+
+</openbox_menu>
