@@ -14,7 +14,7 @@
     <action name="Execute"><execute>x-www-browser</execute></action>
   </item>
   <item label="eclipse">
-    <action name="Execute"><execute>~/devel/adt/eclipse/eclipse</execute></action>
+    <action name="Execute"><execute>/opt/eclipse/eclipse</execute></action>
   </item>
   <item label="gimp">
     <action name="Execute"><execute>gimp</execute></action>
