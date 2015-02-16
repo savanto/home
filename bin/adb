@@ -4,7 +4,7 @@
 # Extends some functionality of adb, and points to its location.
 
 # Location of adb binary
-ADB="${HOME}/devel/adt/sdk/platform-tools/adb"
+ADB="${HOME}/devel/android-sdk-linux/platform-tools/adb"
 
 # Default uninstall package
 PACKAGE=org.brilliant.android
