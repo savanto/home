@@ -49,7 +49,7 @@
 
 <theme>
   <!-- Theme name -->
-  <name>Clearlooks</name>
+  <name>Onyx</name>
   <!-- Layout of the title bar. Available characters are NDSLIMC,
        each can occur at most once.
        N: window icon
