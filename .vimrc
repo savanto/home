@@ -83,11 +83,6 @@ set novisualbell
 set t_vb=
 set tm=500
 
-" Update window title
-set title
-set titleold=""
-set titlestring=VIM:\ %F
-
 " Display current command
 set showcmd
 
@@ -107,6 +102,11 @@ if has("gui_running")
   set guioptions+=e
   set t_Co=256
   set guilabel=%M\ %t
+
+  " Update window title
+  set title
+  set titleold=""
+  set titlestring=VIM:\ %F
 endif
 
 " Autocomplete
