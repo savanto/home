@@ -21,7 +21,7 @@
   <!-- Focus last focused window on desktop when switching to it. -->
   <focusLast>yes</focusLast>
   <!-- Focus windows under mouse even when mouse is not moving. -->
-  <underMouse>no</underMouse>
+  <underMouse>yes</underMouse>
   <!-- Delay before window under mouse takes focus -->
   <focusDelay>300</focusDelay>
   <!-- Raise windows to top when they are focused. -->
@@ -49,7 +49,7 @@
 
 <theme>
   <!-- Theme name -->
-  <name>Clearlooks</name>
+  <name>Onyx</name>
   <!-- Layout of the title bar. Available characters are NDSLIMC,
        each can occur at most once.
        N: window icon
