@@ -25,7 +25,8 @@ shopt -u sourcepath
 # Extended globbing pattern matching.
 shopt -s extglob
 # Null string expansion of globbing patterns that have no match.
-shopt -s nullglob
+# Note: turned off because it breaks tab completion.
+#shopt -s nullglob
 # Recursive globbing with `**`.
 shopt -s globstar
 
