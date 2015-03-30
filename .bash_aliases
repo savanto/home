@@ -41,3 +41,6 @@ alias sqlite='sqlite3'
 
 # ps aux
 alias psaux='ps aux | grep'
+
+# Check battery
+alias batt='upower -i $(upower -e | grep BAT) | grep -E --color=none "state|time|percentage"'
