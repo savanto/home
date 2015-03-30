@@ -1,0 +1,10 @@
+#!/bin/bash
+#
+# Script to enable wifi networking via wpa_supplicant and dhclient.
+#
+
+set -e
+IFACE=${1:-wlan0}
+CONF=${2:-~/.wifi.conf}
+wpa_supplicant -Dnl80211 -i$IFACE -c$CONF -B
+dhclient $IFACE

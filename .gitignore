@@ -17,6 +17,7 @@
 .pulse-cookie
 .ssh/
 .Xauthority
+.wifi.conf
 
 # App directories
 .cmus/
