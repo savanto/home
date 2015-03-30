@@ -1,0 +1,16 @@
+#!/bin/bash
+
+[[ -z "$1" || -z "$2" ]] && echo "Usage: resify OLD_NAME NEW_NAME" && exit 1
+
+mkdir -p drawable-{m,{,x{,x}}h}dpi
+
+for res in "$1"*.png; do
+  case "$res" in
+    *1.5x*.png) dpi=hdpi ;;
+    *2x.png) dpi=xhdpi ;;
+    *3x.png) dpi=xxhdpi ;;
+    *.png) dpi=mdpi ;;
+  esac
+  mv -v "$res" "drawable-$dpi/${2}.png"
+done
+
