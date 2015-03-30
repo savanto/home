@@ -22,6 +22,12 @@ shopt -s histappend
 # Do not allow the source (.) builtin to use the value of PATH to find the
 # directory containing the file supplied as an argument.
 shopt -u sourcepath
+# Extended globbing pattern matching.
+shopt -s extglob
+# Null string expansion of globbing patterns that have no match.
+shopt -s nullglob
+# Recursive globbing with `**`.
+shopt -s globstar
 
 # Enable the lesspipe filter for less for viewing a wider variety of files.
 # See lesspipe(1) for more info.
