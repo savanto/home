@@ -35,7 +35,11 @@ PATH="${PATH}:/sbin"
 [ -d "${HOME}/bin" ] && PATH="${HOME}/bin:${PATH}"
 
 # Start ssh-agent
-[[ -z "$SSH_AGENT_PID" ]] && eval $(/usr/bin/ssh-agent -s)
+if [[ -z "${SSH_AGENT_PID:=$(pidof ssh-agent)}" ]]; then
+  eval $(/usr/bin/ssh-agent -s)
+else
+  export SSH_AGENT_PID
+fi
 
 # Automatically start x when logging in on tty6
 if [[ -z "$DISPLAY" ]] && [[ $(/usr/bin/tty) = /dev/tty6 ]]; then
