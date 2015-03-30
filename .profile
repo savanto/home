@@ -36,8 +36,9 @@ PATH="${PATH}:/sbin"
 
 # Start ssh-agent
 if [[ -z "${SSH_AGENT_PID:=$(pidof ssh-agent)}" ]]; then
-  eval $(/usr/bin/ssh-agent -s)
+  eval $(/usr/bin/ssh-agent -s -t 3600)
 else
+  export SSH_AUTH_SOCK=$(ls -t /tmp/ssh-*/agent.$((SSH_AGENT_PID - 1)) 2>/dev/null | head -1)
   export SSH_AGENT_PID
 fi
 
