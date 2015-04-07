@@ -11,6 +11,7 @@ for res in "$1"*.png; do
     *3x.png) dpi=xxhdpi ;;
     *.png) dpi=mdpi ;;
   esac
+  chmod 644 "$res"
   mv -v "$res" "drawable-$dpi/${2}.png"
 done
 
