@@ -45,7 +45,7 @@
     <action name="Exit" />
   </item>
   <item label="lock">
-    <action name="Execute"><execute>slock</execute></action>
+    <action name="Execute"><execute>sh -c '/home/anton/bin/rotate normal &amp;&amp; /usr/bin/slock &amp;&amp; /home/anton/bin/rotate left'</execute></action>
   </item>
 </menu>
 
