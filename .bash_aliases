@@ -30,8 +30,9 @@ alias sudo='sudo '
 
 # apt-get
 alias agi='apt-get install --no-install-recommends'
-alias agu='apt-get upgrade'
+alias agu='apt-get upgrade -V'
 alias agv='apt-get update'
+alias agl='apt-get changelog'
 alias acs='apt-cache search'
 alias act='apt-cache show'
 alias acp='apt-cache policy'

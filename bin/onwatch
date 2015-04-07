@@ -98,7 +98,7 @@ fi
 # Display xmessage popup, if possible
 [[ -n "$POPUP" ]] && which xmessage > /dev/null \
   && xmessage -timeout 5 -buttons "" -xrm 'xmessage.x: 0' -xrm 'xmessage.y: 0' \
-  -display localhost:0.0 "$output" &
+  -display :0 "$output" 2>/dev/null &
 
 # Output to stdout
 [[ -z "$QUIET" ]] && echo "$output"
