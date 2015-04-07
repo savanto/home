@@ -25,13 +25,16 @@
 
 # App directories
 .android/
+.AndroidStudio/
 .cmus/
 .cups/
 .eclipse/
 .gegl-0.0/
 .ghc/
 .gimp-2.8/
+.gradle/
 .gstreamer-0.10/
+.java/
 .john/
 .mozilla/
 .node-gyp/
@@ -41,6 +44,7 @@
 .vbox/
 .vim/.netrwhist
 .virtualenvs/
+.wine/
 
 # Home directories
 devel/
