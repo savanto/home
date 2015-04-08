@@ -34,9 +34,9 @@ PATH="${PATH}:/sbin"
 # Prepend personal bin directory to PATH if it exists
 [ -d "${HOME}/bin" ] && PATH="${HOME}/bin:${PATH}"
 
-# Start ssh-agent
+# Start ssh-agent, keep keys for 24 hours.
 if [[ -z "${SSH_AGENT_PID:=$(pidof ssh-agent)}" ]]; then
-  eval $(/usr/bin/ssh-agent -s -t 3600)
+  eval $(/usr/bin/ssh-agent -s -t 86400)
 else
   export SSH_AUTH_SOCK=$(ls -t /tmp/ssh-*/agent.$((SSH_AGENT_PID - 1)) 2>/dev/null | head -1)
   export SSH_AGENT_PID
