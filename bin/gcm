@@ -59,6 +59,7 @@ CAMPAIGN=""
 # Customer.io subject
 CUSTOMER_IO_SUBJECT=""
 
+LOGGED_OUT="false"
 
 # Aliases for quick testing
 #
@@ -177,6 +178,7 @@ CURL="${CURL} -d \"{\\\"data\\\":{"
 [[ -n "$LINK_URL" ]] && CURL="${CURL}\\\"linkUrl\\\":\\\"${LINK_URL}\\\","
 [[ -n "$MESSAGE_TYPE" ]] && CURL="${CURL}\\\"messageType\\\":\\\"${MESSAGE_TYPE}\\\","
 [[ -n "$MESSAGE_PRIORITY" ]] && CURL="${CURL}\\\"messagePriority\\\":\\\"${MESSAGE_PRIORITY}\\\","
+[[ -n "$LOGGED_OUT" ]] && CURL="${CURL}\\\"org.brilliant.android.PushNotifNeverLoggedIn\\\":\\\"${LOGGED_OUT}\\\","
 CURL="${CURL}},\\\"registration_ids\\\":["${REGID}"]}\""
 
 # Execute curl command
