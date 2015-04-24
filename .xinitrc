@@ -12,6 +12,4 @@
 /usr/bin/numlockx on
 /usr/bin/xset led 1
 
-# Start openbox window manager
-/usr/bin/openbox
-
+. /etc/X11/Xsession
