@@ -14,6 +14,7 @@
   ac = !git add -A && git commit
   st = status -sb
   ls = ls-tree --name-only -r HEAD
+  cp = cherry-pick
   tags = tag -l
   branches = branch -a
   remotes = remote -v
