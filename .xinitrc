@@ -8,6 +8,4 @@
 # Set keyboard to allow Russian language
 /usr/bin/setxkbmap -model pc105 -layout us,ru -option grp:shifts_toggle
 
-# Start openbox window manager
-/usr/bin/openbox
-
+. /etc/X11/Xsession
