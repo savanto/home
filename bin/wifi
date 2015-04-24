@@ -1,10 +1,36 @@
 #!/bin/bash
 #
-# Script to enable wifi networking via wpa_supplicant and dhclient.
+# Script to connect to wireless networks.
+# Uses wpa_supplicant and dhclient
+# TODO unsecured/insecure networks
 #
 
 set -e
+
+[[ $UID -ne 0 ]] && echo "Must be root" && false
+
+usage() {
+  echo "Usage: ${0##*/} [-i INTERFACE] [-c CONF]"
+}
+
+while getopts c:i: opt; do
+  case "$opt" in
+    i)
+      IFACE=$OPT_ARG
+      ;;
+    c)
+      CONF=$OPT_ARG
+      ;;
+    *)
+      usage && exit 1
+  esac
+done
+
+CONF=${2:-/run/user/$(id -u $SUDO_USER)/wifi.conf}
 IFACE=${1:-wlan0}
-CONF=${2:-~/.wifi.conf}
-wpa_supplicant -Dnl80211 -i$IFACE -c$CONF -B
+[[ -r "$CONF" ]] || (umask 0077 && pass misc/wifi.conf > $CONF)
+trap "shred -zu $CONF 2>/dev/null" ERR INT
+killall wpa_supplicant 2>/dev/null || true
+dhclient -r $IFACE || true
+wpa_supplicant -Dnl80211,wext -i$IFACE -c$CONF -B
 dhclient $IFACE
