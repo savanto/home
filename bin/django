@@ -47,7 +47,7 @@ fi
 # Start the server with the appropriate command
 case "$1" in
   runserver)
-    gulp watch --dev &
+#    gulp watch --dev &
     python manage.py "$1" "${2:-$LISTEN_IP}"
     ;;
 
@@ -74,6 +74,13 @@ case "$1" in
     shift
     python manage.py auto_templated_problems --settings=auto_email_local_settings "$@"
 #    rsync -rv --checksum ./static/email/auto-templated-problems/ static:~/email/auto-templated-problems/
+    ;;
+
+  pip)
+    shift
+    if [[ -z "$1" ]]; then pip install -r requirements.txt
+    else pip "$@"
+    fi
     ;;
 
   *)
