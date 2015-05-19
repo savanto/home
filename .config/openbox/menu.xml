@@ -13,6 +13,9 @@
   <item label="browser">
     <action name="Execute"><execute>x-www-browser</execute></action>
   </item>
+  <item label="studio">
+    <action name="Execute"><execute>/opt/android-studio/bin/studio.sh</execute></action>
+  </item>
 
   <separator />
 
