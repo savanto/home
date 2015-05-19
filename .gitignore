@@ -19,13 +19,22 @@
 .Xauthority
 
 # App directories
+.AndroidStudio/
+.android/
 .cmus/
 .cups/
 .ghc/
-.gimp-2.6/
+.gimp-*/
+.gnome/
+.gradle/
+.gstreamer-*/
+.icons
+.java/
+.minecraft/
 .pip/
 .pulse/
 .vim/.netrwhist
+.wine/
 
 # Home directories
 devel/
