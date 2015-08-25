@@ -9,9 +9,14 @@
 .viminfo
 
 # Security
+.aws/
+.boto
+.brilliant/
 .ecryptfs
 .gnupg/
+.gsutil/
 .password-store/
+.pgpass
 .pki/
 .Private
 .pulse-cookie
@@ -19,8 +24,8 @@
 .Xauthority
 
 # App directories
-.AndroidStudio/
 .android/
+.AndroidStudio*/
 .cmus/
 .cups/
 .ghc/
@@ -30,15 +35,22 @@
 .gstreamer-*/
 .icons
 .java/
+.john/
+.mozilla/
 .minecraft/
+.node-gyp/
+.npm/
 .pip/
 .pulse/
 .vim/.netrwhist
+.virtualenvs/
 .wine/
 
 # Home directories
 devel/
+docs/
 music/
+prod/
 tmp/
 
 # Misc
@@ -49,5 +61,6 @@ tmp/
 .fonts/
 .local/
 .thumbnails/
+.xsel.log
 .xsession-errors
 .wallpaper/
