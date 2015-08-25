@@ -210,7 +210,7 @@
   <!-- Keybindings for applications -->
   <!-- Lock screen -->
   <keybind key="C-A-l">
-    <action name="Execute"><command>sh -c '/home/anton/bin/rotate normal &amp;&amp; /usr/bin/slock &amp;&amp; /home/anton/bin/rotate left'</command></action>
+    <action name="Execute"><command>sh -c '$HOME/bin/rotate normal &amp;&amp; /usr/bin/slock &amp;&amp; $HOME/bin/rotate left'</command></action>
   </keybind>
   <!-- Browser -->
   <keybind key="C-A-b">
