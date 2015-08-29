@@ -7,30 +7,41 @@
 
 set -e
 
-[[ $UID -ne 0 ]] && echo "Must be root" && false
+[[ $UID -ne 0 ]] && echo "Must be root." && exit 1
 
 usage() {
-  echo "Usage: ${0##*/} [-i INTERFACE] [-c CONF]"
+  echo "Usage: ${0##*/} [-h] [-c config|<ssid> <pass>]"
+  echo
+  echo "-c config       Config file with network setup info."
+  echo "<ssid> <pass>   Network and passphrase to use. Passphrase must be 8..63"
+  echo "                characters."
+  echo "-h              Print this message and exit."
+  echo "---             ---"
+  echo "                With no arguments, the output of 'pass misc/wifi.conf'"
+  echo "                will be used as the WPA config."
 }
 
-while getopts c:i: opt; do
+IFACE=wlan0
+WIFI=/run/user/$(id -u $SUDO_USER)/wifi.conf
+
+while getopts c:h opt; do
   case "$opt" in
-    i)
-      IFACE=$OPT_ARG
-      ;;
-    c)
-      CONF=$OPT_ARG
-      ;;
-    *)
-      usage && exit 1
+    c) CONF="$OPTARG" ;;
+    h) usage && exit ;;
   esac
 done
 
-CONF=${2:-/run/user/$(id -u $SUDO_USER)/wifi.conf}
-IFACE=${1:-wlan0}
-[[ -r "$CONF" ]] || (umask 0077 && pass misc/wifi.conf > $CONF)
-trap "shred -zu $CONF 2>/dev/null" ERR INT
+trap "shred -zu $WIFI 2>/dev/null" ERR INT
+if [[ -r "$CONF" ]]; then
+  (umask 0077 && cat "$CONF" >"$WIFI")
+elif [[ $# -eq 2 ]]; then
+  (umask 0077 && wpa_passphrase "$1" "$2" >"$WIFI") \
+    || echo "Bad ssid or passphrase." && exit 1
+else
+  (umask 0077 && pass misc/wifi.conf >"$WIFI")
+fi
+
 killall wpa_supplicant 2>/dev/null || true
-dhclient -r $IFACE || true
-wpa_supplicant -Dnl80211,wext -i$IFACE -c$CONF -B
-dhclient $IFACE
+dhclient -r "$IFACE" || true
+wpa_supplicant -Dnl80211,wext -i"$IFACE" -c"$WIFI" -B
+dhclient "$IFACE"
