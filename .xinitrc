@@ -6,7 +6,7 @@
 # Place configuration lines prior to running the global x session script.
 
 # Set keyboard to allow Russian language
-/usr/bin/setxkbmap -model pc105 -layout us,ru -option grp:shifts_toggle
+/usr/bin/setxkbmap -model pc105 -layout us,ru -option grp:shifts_toggle,grp_led:scroll,compose:ralt
 
 # Set numlock on
 /usr/bin/numlockx on
