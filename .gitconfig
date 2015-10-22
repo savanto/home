@@ -17,6 +17,8 @@
   cp = cherry-pick
   tags = tag -l
   branches = branch -a
+  graph = log --graph --all --oneline --decorate
+  last = log -1 HEAD
   remotes = remote -v
   assume = update-index --assume-unchanged
   unassume = update-index --no-assume-unchanged

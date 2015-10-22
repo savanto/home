@@ -14,13 +14,10 @@ alias lsd='ls -d'
 
 # grep
 alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
-
-# ack
-alias pack='ack --python'
-alias xack='ack --xml'
-alias jack='ack --java'
+alias fgrep='grep -F'
+alias egrep='grep -E'
+alias rgrep='grep -r'
+alias psgrep='ps aux | grep'
 
 # dmesg
 alias dmesg='dmesg --color=auto'
@@ -32,15 +29,24 @@ alias sudo='sudo '
 alias agi='apt-get install --no-install-recommends'
 alias agu='apt-get upgrade'
 alias agv='apt-get update'
+<<<<<<< HEAD
+=======
+alias agl='apt-get changelog'
+alias agc='apt-get changelog'
+alias ags='apt-get source'
+>>>>>>> 81da5bf... Add aliases
 alias acs='apt-cache search'
 alias act='apt-cache show'
 alias acp='apt-cache policy'
 
 # sqlite3
 alias sqlite='sqlite3'
+<<<<<<< HEAD
 
 # ps aux
 alias psaux='ps aux | grep'
 
 # Check battery
 alias batt='upower -i $(upower -e | grep BAT) | grep -E --color=none "state|time|percentage"'
+=======
+>>>>>>> 81da5bf... Add aliases
