@@ -14,13 +14,10 @@ alias lsd='ls -d'
 
 # grep
 alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
-
-# ack
-alias pack='ack --python'
-alias xack='ack --xml'
-alias jack='ack --java'
+alias fgrep='grep -F'
+alias egrep='grep -E'
+alias rgrep='grep -r'
+alias psgrep='ps aux | grep'
 
 # dmesg
 alias dmesg='dmesg --color=auto'
@@ -33,12 +30,11 @@ alias agi='apt-get install --no-install-recommends'
 alias agu='apt-get upgrade -V'
 alias agv='apt-get update'
 alias agl='apt-get changelog'
+alias agc='apt-get changelog'
+alias ags='apt-get source'
 alias acs='apt-cache search'
 alias act='apt-cache show'
 alias acp='apt-cache policy'
 
 # sqlite3
 alias sqlite='sqlite3'
-
-# ps aux
-alias psaux='ps aux | grep'
