@@ -1,4 +1,5 @@
 #!/bin/bash
 
-/usr/bin/xrandr --output HDMI1 --mode 1920x1080 --rotate normal --output VGA1 --mode 1920x1080 --right-of HDMI1 --rotate $1
+/usr/bin/xrandr --output HDMI1 --mode 1920x1080 --rotate normal \
+  --output HDMI2 --mode 1920x1080 --right-of HDMI1 --rotate $1
 
