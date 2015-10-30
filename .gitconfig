@@ -9,6 +9,7 @@
   tool = vimdiff
 
 [alias]
+  ca = commit -a
   ch = checkout
   cm = commit
   ac = !git add -A && git commit
