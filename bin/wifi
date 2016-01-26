@@ -36,7 +36,7 @@ if [[ -r "$CONF" ]]; then
   (umask 0077 && cat "$CONF" >"$WIFI")
 elif [[ $# -eq 2 ]]; then
   (umask 0077 && wpa_passphrase "$1" "$2" >"$WIFI") \
-    || echo "Bad ssid or passphrase." && exit 1
+    || (echo "Bad ssid or passphrase." && exit 1)
 else
   (umask 0077 && pass misc/wifi.conf >"$WIFI")
 fi
