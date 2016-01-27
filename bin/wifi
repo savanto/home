@@ -22,7 +22,7 @@ usage() {
 }
 
 IFACE=wlan0
-WIFI=/run/user/$(id -u $SUDO_USER)/wifi.conf
+WIFI=/run/shm/wifi.conf
 
 while getopts c:h opt; do
   case "$opt" in
@@ -37,6 +37,8 @@ if [[ -r "$CONF" ]]; then
 elif [[ $# -eq 2 ]]; then
   (umask 0077 && wpa_passphrase "$1" "$2" >"$WIFI") \
     || (echo "Bad ssid or passphrase." && exit 1)
+elif [[ -r "$WIFI" ]]; then
+  :
 else
   (umask 0077 && pass misc/wifi.conf >"$WIFI")
 fi
