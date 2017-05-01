@@ -1,212 +1,107 @@
 "
-" ~/.vimrc
-"
 " Vim initialization file. See :help vimrc for more info.
+"
 
-
-" GENERAL
-" -------
-" Vi-incompatible mode (vim); must be first setting in file.
-set nocompatible
-
-" Number of lines of history stored in buffer
-set history=1000
-
-" Enable filetype plugins
-filetype plugin on
-filetype indent on
-
-" Set to autoread when a file is changed form the outside
-set autoread
-
-" Set shell to interactive mode
-set shellcmdflag=-ic
-
-" File backup
-set writebackup
-" No backup
-"set nobackup
-
-
-
-" USER INTERFACE
-" ---- ---------
-" File completion settings
-set wildmenu
-set wildmode=list:longest
-" Ignore compiled files
-set wildignore=*.o,*~,*.pyc
-
-" Display cursor location
-set ruler
-
-" Set cursor distance from top/bottom at which buffer is scrolled
-set so=5
-
-" Set command bar height
-set cmdheight=2
-
-" Hide buffer if it is abandoned
-set hid
-
-" Enable normal backspace in insert mode
-set backspace=indent,eol,start
-set whichwrap+=<,>,h,l
-
-" Searching
-" Do not ignore case
-set noignorecase
-" Smart case
-set smartcase
-" Incremental search
-set incsearch
-" Highlight search results
-set hlsearch
-"set nohlsearch
-" Turn on magic regexp
-set magic
-
-" No redraw for macro execution (improves performance)
-set lazyredraw
-
-" Matching brackets
-" Show matching brackets
-set showmatch
-" Time to show matching brackets
-set mat=2
-
-" Error indicator
-" Silence bell
-set noerrorbells
-" No visual error bell
-set novisualbell
-set t_vb=
-set tm=500
-
-" Display current command
-set showcmd
-
-" Short message prompts
-"set shortmess=atI
-
-" Remember marks, registers, searches, buffer list
-set viminfo='20,<50,s10,h,%
-
-" Display line numbers
-set number
-highlight LineNr ctermbg=233 guibg=#121212
-
-" Set extra options when in GUI mode
-if has("gui_running")
-  set guioptions-=T
-  set guioptions+=e
-  set t_Co=256
-  set guilabel=%M\ %t
-
-  " Update window title
-  set title
-  set titleold=""
-  set titlestring=VIM:\ %F
-endif
-
-" Autocomplete
-set ofu=syntaxcomplete#Complete
-
-
-" COLORS AND FONTS
-" ------ --- -----
-" Syntax highlighting
-syntax enable
-" Set colorscheme
-set background=dark
-"colorscheme slate
-colorscheme solarized
-
-" Set encoding
-set encoding=utf8
-
-" Use Unix as standard file type
-set ffs=unix,dos,mac
-
-
-" INDENTING, TABS, LINES
-" ---------  ----  -----
-" Indenting
-" Autoindent
-set autoindent
-" No 'smart' indenting
-set nosmartindent
-
-" Tabs
-" Use spaces instead of tabs
-set expandtab
-set smarttab
-" ...except for make files (they require tabs)
-autocmd FileType make setlocal noexpandtab
-" Tab sizes
-set tabstop=2
-set softtabstop=2
-set shiftwidth=2
-set shiftround
-
-" Lines
-" Auto linebreak after a number of characters
-"set linebreak
-" Textwidth for pasting (set to 0 anyway if paste is on)
-"set textwidth=500
-" Color 80th and 100th columns if possible.
-if exists('+colorcolumn')
-  set colorcolumn=81,101
-	highlight ColorColumn ctermbg=233 guibg=#121212
-"else
-"  autocmd BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>100v.\+', -1)
-endif
-
-
-" NAVIGATION AND WINDOWS
-" ---------- --- -------
-" Treat long lines as break lines for easier navigation
-map j gj
-map k gk
-map <DOWN> gj
-map <UP> gk
-
-" Enable Enter and Delete in normal mode
-function! Delete_key(...)
-  let line=getline(".")
-  if line=~'^\s*$'
-    execute "normal dd"
-    return
-  endif
-  let column = col(".")
-  let line_len = strlen(line)
-  let first_or_end = 0
-  if column == 1 || column == line_len
-    let first_or_end = 1
-  endif
-  execute "normal i\<DEL>\<ESC>"
-  if first_or_end == 0
-    execute "normal l"
-  endif
-endfunction
-nnoremap <silent> <DEL> :call Delete_key()<CR>
-nnoremap <silent> <CR> i<CR><Esc>
-
-" Set Shift-Enter to insert line above
-nnoremap <S-Enter> O<Esc>
-
-" Restore last cursor position
+" FILES
+" -----
+set nocompatible " Vi-incompatible mode (vim); must be first setting in file.
+set history=1000 " Number of lines of history stored in buffer.
+filetype indent on " Load filetype-specific indentation files.
+filetype plugin on " Enable filetype-specific plugins.
+set encoding=utf8 " Set encoding.
+set fileformats=unix,dos,mac " Order of filetypes to try to use.
+set hidden " Change bufferes without writing to file.
+set autoread " Re-read file when it is changed outside of vim.
+set writebackup " Temp backup during write, removed on success.
+set viminfo='20,<50,s10,h,% " Remember marks, registers, searches, buffer list.
+" Restore last cursor position:
 function! Restore_cursor()
   if line("'\"") > 0 && line("'\"") <= line("$")
     exe "normal! g'\""
   endif
 endfunction
 autocmd BufReadPost * call Restore_cursor()
+" Remove trailing whitespace on save:
+autocmd BufWritePre * %s/\s\+$//e
 
-" Navigate code using exuberant ctags
-set tags=tags;$HOME
-set tags+=$HOME/.vim/tags/cpp
-set tags+=$HOME/.vim/tags/curl
-set tags+=$HOME/.vim/tags/httpd
-set tags+=$HOME/.vim/tags/libmozjs
-set tags+=$HOME/.vim/tags/libxml2
+
+" COLORS
+" ------
+set background=dark " Use dark variant of colorscheme.
+"colorscheme slate " Use slate scheme.
+colorscheme solarized " Use solarized scheme.
+syntax enable " Enable syntax highlighting.
+
+
+" INDENTATION
+" -----------
+set expandtab " Use spaces instead of tabs when inserting.
+autocmd FileType make setlocal noexpandtab " Use tabs instead of spaces for make files (required).
+set tabstop=4 " Number of spaces to display a \t character.
+set softtabstop=2 " Number of spaces to insert on indent.
+set shiftwidth=2 " Number of spaces to shift (indent); if 0, tabstop value used as fallback.
+set shiftround " Round shift (indent) to multiple of shiftwidth.
+set autoindent " Auto-indent subsequent line to the level of the current line on CR.
+set smarttab " Indent according to shiftwidth, instead of [soft]tabstop.
+set nosmartindent " ???
+
+
+" FOLDING
+" -------
+set foldenable " Enable folding.
+set foldlevelstart=10 " Depth at which to start folding.
+set foldnestmax=10 " Max depth for nested folds.
+set foldmethod=indent " Fold based on indent level; other methods available.
+
+
+" UI
+" --
+set number " Display line numbers.
+" Highlight left line-number gutter slightly:
+highlight LineNr ctermbg=233 guibg=#111111
+set showcmd " Display current command in bottom gutter.
+set cmdheight=2 " Command line height.
+set cursorline " Highlight current line.
+set ruler " Display cursor position in bottom gutter.
+set wildmenu " Enable file auto-completion.
+set wildmode=list:longest " File auto-completion settings.
+set wildignore=*.o,*~,*.pyc " File auto-completion ignored files.
+set scrolloff=5 " Minimum lines to show above/below cursor.
+set lazyredraw " Do not redraw during macro execution for better performance.
+set showmatch " Show matching brackets.
+set noerrorbells " Silence bell.
+set t_vb= " No visual error bell.
+set timeoutlen=500 " Time (ms) for a key sequence to complete.
+set shellcmdflag=-ic " Flags to pass to shell when running commands using `!`.
+" Color 80th and 100th columns if possible:
+if exists('+colorcolumn')
+  set colorcolumn=81,101
+  highlight ColorColumn ctermbg=233 guibg=#121212
+endif
+
+
+" SEARCH
+" ------
+set incsearch " Incremental search as characters are entered.
+set hlsearch " Highlight search matches.
+set noignorecase " Do not ignore case when searching.
+
+
+" MOVEMENT & MAPPINGS
+" -------------------
+set backspace=indent,eol,start " Set backspace key behavior.
+set whichwrap+=<,>,h,l " Movement keys allowed to wrap over eol.
+" Move vertically by visual line, rather than true line:
+nnoremap j gj
+nnoremap k gk
+nnoremap <down> gj
+nnoremap <up> gk
+" Split lines/add new lines:
+nnoremap <c-j> i<cr><esc>
+nnoremap <cr> o<esc>
+" Some shortcuts:
+let mapleader=","
+nnoremap <leader>w :w<cr>
+nnoremap <leader>q :q<cr>
+nnoremap <leader>wq :wq<cr>
+
