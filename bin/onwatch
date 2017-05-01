@@ -102,3 +102,4 @@ fi
 
 # Output to stdout
 [[ -z "$QUIET" ]] && echo "$output"
+
