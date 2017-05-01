@@ -57,6 +57,3 @@ if ! shopt -oq posix; then
   [[ -f "$HOME/.bash_completion" ]] && . "$HOME/.bash_completion"
 fi
 
-# Set default editor
-export EDITOR=/usr/bin/vim
-

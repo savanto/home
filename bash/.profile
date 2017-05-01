@@ -35,6 +35,12 @@ PATH="${PATH}:/sbin"
 # Prepend personal bin directory to PATH if it exists
 [[ -d "${HOME}/bin" ]] && PATH="${HOME}/bin:${PATH}"
 
+# Set default editor
+export EDITOR=/usr/bin/vim
+
+# Set less utility behavior
+export LESSHISTFILE=/dev/null
+
 # Start ssh-agent, keep keys for 24 hours.
 if [[ -z "${SSH_AGENT_PID:=$(pidof ssh-agent)}" ]]; then
   eval $(/usr/bin/ssh-agent -s -t 86400)
