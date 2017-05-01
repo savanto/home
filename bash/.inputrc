@@ -36,6 +36,9 @@ set keymap vi-insert
 # Ctrl-Left/Right moves between words.
 "\e[1;5C": forward-word
 "\e[1;5D": backward-word
+# Home and End keys.
+"\e[1~": beginning-of-line
+"\e[4~": end-of-line
 # Insert key inserts a quoted control character.
 "\e[2~": quoted-insert
 # History search for given prefix.
@@ -47,6 +50,9 @@ set keymap vi-command
 # Ctrl-Left/Right moves between words.
 "\e[1;5C": forward-word
 "\e[1;5D": backward-word
+# Home and End keys.
+"\e[1~": beginning-of-line
+"\e[4~": end-of-line
 # History search for given prefix.
 "\e[1;5A": history-search-backward
 "\e[1;5B": history-search-forward
