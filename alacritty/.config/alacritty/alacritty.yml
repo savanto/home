@@ -1,0 +1,194 @@
+# Alacritty config. Modified from
+# https://github.com/jwilm/alacritty/blob/f298e0455ab549aac1835ba59467ce06111b9bc9/alacritty.yml
+
+# Window dimensions in character columns and lines.
+dimensions:
+  columns: 120
+  lines: 60
+
+# The FreeType rasterizer needs to know the device DPI for best results.
+dpi:
+  x: 96.0
+  y: 96.0
+
+# Display tabs using this many cells.
+tabspaces: 5
+
+# Font configuration.
+draw_bold_text_with_bright_colors: true
+font:
+  normal:
+    family: FantasqueSansMono
+
+  bold:
+    family: FantasqueSansMono
+    style: Bold
+
+  italic:
+    family: FantasqueSansMono
+    style: Italic
+
+  size: 12.0
+
+  # Offset is the extra space around each character. offset.y can be thought of
+  # as modifying the linespacing, and offset.x as modifying the letter spacing.
+  offset:
+    x: 0.0
+    y: 0.0
+
+  # Glyph offset determines the locations of the glyphs within their cells with
+  # the default being at the bottom. Increase the x offset to move the glyph to
+  # the right, increase the y offset to move the glyph upward.
+  glyph_offset:
+    x: 0.0
+    y: 0.0
+
+# Use custom cursor colors (colors.cursor) instead of inverting text color underneath.
+custom_cursor_colors: true
+
+# Colors (modified Solarized)
+colors:
+  # Default colors
+  primary:
+    background: '0x000000'
+    foreground: '0xaaaaaa'
+
+  # Colors the cursor will use if `custom_cursor_colors` is true
+  cursor:
+    text: '0x000000'
+    cursor: '0xaaaaaa'
+
+  # Normal colors
+  normal:
+    black:   '0x000000'
+    red:     '0xdc322f'
+    green:   '0x559900'
+    yellow:  '0xb58900'
+    blue:    '0x268bd2'
+    magenta: '0xd33682'
+    cyan:    '0x2aa198'
+    white:   '0xeee8d5'
+
+  # Bright colors
+  bright:
+    black:   '0x002b36'
+    red:     '0xcb4b16'
+    green:   '0x586e75'
+    yellow:  '0xe7c547'
+    blue:    '0x839496'
+    magenta: '0x6c71c4'
+    cyan:    '0x93a1a1'
+    white:   '0xfdf6e3'
+
+# No visual bell.
+visual_bell:
+  duration: 0
+
+# Key bindings
+#
+# Each binding is defined as an object with some properties. Most of the
+# properties are optional. All of the alphabetical keys should have a letter for
+# the `key` value such as `V`. Function keys are probably what you would expect
+# as well (F1, F2, ..). The number keys above the main keyboard are encoded as
+# `Key1`, `Key2`, etc. Keys on the number pad are encoded `Number1`, `Number2`,
+# etc.  These all match the glutin::VirtualKeyCode variants.
+#
+# Possible values for `mods`
+# `Command`, `Super` refer to the super/command/windows key
+# `Control` for the control key
+# `Shift` for the Shift key
+# `Alt` and `Option` refer to alt/option
+#
+# mods may be combined with a `|`. For example, requiring control and shift
+# looks like:
+#
+# mods: Control|Shift
+#
+# The parser is currently quite sensitive to whitespace and capitalization -
+# capitalization must match exactly, and piped items must not have whitespace
+# around them.
+#
+# Either an `action` or `chars` field must be present. `chars` writes the
+# specified string every time that binding is activated. These should generally
+# be escape sequences, but they can be configured to send arbitrary strings of
+# bytes. Possible values of `action` include `Paste` and `PasteSelection`.
+#
+# Want to add a binding (e.g. "PageUp") but are unsure what the X sequence
+# (e.g. "\x1b[5~") is? Open another terminal (like xterm) without tmux,
+# then run `showkey -a` to get the sequence associated to a key combination.
+key_bindings:
+  - { key: V,        mods: Control|Shift,    action: Paste               }
+  - { key: C,        mods: Control|Shift,    action: Copy                }
+  - { key: Q,        mods: Command, action: Quit                         }
+  - { key: W,        mods: Command, action: Quit                         }
+  - { key: Insert,   mods: Shift,   action: PasteSelection               }
+  - { key: Home,                    chars: "\x1bOH",   mode: AppCursor   }
+  - { key: Home,                    chars: "\x1b[1~",  mode: ~AppCursor  }
+  - { key: End,                     chars: "\x1bOF",   mode: AppCursor   }
+  - { key: End,                     chars: "\x1b[4~",  mode: ~AppCursor  }
+  - { key: PageUp,                  chars: "\x1b[5~"                     }
+  - { key: PageDown,                chars: "\x1b[6~"                     }
+  - { key: Left,     mods: Shift,   chars: "\x1b[1;2D"                   }
+  - { key: Left,     mods: Control, chars: "\x1b[1;5D"                   }
+  - { key: Left,     mods: Alt,     chars: "\x1b[1;3D"                   }
+  - { key: Left,                    chars: "\x1b[D",   mode: ~AppCursor  }
+  - { key: Left,                    chars: "\x1bOD",   mode: AppCursor   }
+  - { key: Right,    mods: Shift,   chars: "\x1b[1;2C"                   }
+  - { key: Right,    mods: Control, chars: "\x1b[1;5C"                   }
+  - { key: Right,    mods: Alt,     chars: "\x1b[1;3C"                   }
+  - { key: Right,                   chars: "\x1b[C",   mode: ~AppCursor  }
+  - { key: Right,                   chars: "\x1bOC",   mode: AppCursor   }
+  - { key: Up,       mods: Shift,   chars: "\x1b[1;2A"                   }
+  - { key: Up,       mods: Control, chars: "\x1b[1;5A"                   }
+  - { key: Up,       mods: Alt,     chars: "\x1b[1;3A"                   }
+  - { key: Up,                      chars: "\x1b[A",   mode: ~AppCursor  }
+  - { key: Up,                      chars: "\x1bOA",   mode: AppCursor   }
+  - { key: Down,     mods: Shift,   chars: "\x1b[1;2B"                   }
+  - { key: Down,     mods: Control, chars: "\x1b[1;5B"                   }
+  - { key: Down,     mods: Alt,     chars: "\x1b[1;3B"                   }
+  - { key: Down,                    chars: "\x1b[B",   mode: ~AppCursor  }
+  - { key: Down,                    chars: "\x1bOB",   mode: AppCursor   }
+  - { key: Tab,      mods: Shift,   chars: "\x1b[Z"                      }
+  - { key: F1,                      chars: "\x1bOP"                      }
+  - { key: F2,                      chars: "\x1bOQ"                      }
+  - { key: F3,                      chars: "\x1bOR"                      }
+  - { key: F4,                      chars: "\x1bOS"                      }
+  - { key: F5,                      chars: "\x1b[15~"                    }
+  - { key: F6,                      chars: "\x1b[17~"                    }
+  - { key: F7,                      chars: "\x1b[18~"                    }
+  - { key: F8,                      chars: "\x1b[19~"                    }
+  - { key: F9,                      chars: "\x1b[20~"                    }
+  - { key: F10,                     chars: "\x1b[21~"                    }
+  - { key: F11,                     chars: "\x1b[23~"                    }
+  - { key: F12,                     chars: "\x1b[24~"                    }
+  - { key: Back,                    chars: "\x7f"                        }
+  - { key: Back,     mods: Alt,     chars: "\x1b\x7f"                    }
+  - { key: Insert,                  chars: "\x1b[2~"                     }
+  - { key: Delete,                  chars: "\x1b[3~"                     }
+
+# Mouse bindings
+#
+# Currently doesn't support modifiers. Both the `mouse` and `action` fields must be specified.
+#
+# Values for `mouse`:
+# - Middle
+# - Left
+# - Right
+# - Numeric identifier such as `5`
+#
+# Values for `action`:
+# - Paste
+# - PasteSelection
+# - Copy (TODO)
+mouse_bindings:
+  - { mouse: Middle, action: PasteSelection }
+
+mouse:
+  double_click: { threshold: 300 }
+  triple_click: { threshold: 300 }
+
+selection:
+  semantic_escape_chars: ",│`|:\"' ()[]{}<>"
+
+hide_cursor_when_typing: false
+
