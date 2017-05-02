@@ -1,7 +1,5 @@
-#
 # This file is executed by bash(1) for interactive non-login shells.
 # It is used for interactive bash-specific shell initialization.
-#
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
@@ -36,13 +34,17 @@ shopt -s globstar
 # See lesspipe(1) for more info.
 [[ -x /usr/bin/lesspipe.sh ]] && eval "$(SHELL=/bin/sh lesspipe.sh)"
 
-# Set the prompt
-BLUE='\[\033[00;34m\]'
-GREEN='\[\033[00;32m\]'
-RESET='\[\033[00m\]'
-PS1="${GREEN}\u@\h${RESET}:${BLUE}\w${GREEN}\$${RESET} "
+# Set the prompt.
+if [[ -n "$SSH_CLIENT" || -n "$SSH_TTY" || -n "$SSH_CONNECTION" ]]; then
+  user='\[\033[00;33m\]' # yellow
+else
+  user='\[\033[00;32m\]' # green
+fi
+path='\[\033[00;34m\]' # blue
+reset='\[\033[00m\]'
+PS1="${user}\u@\h${reset}:${path}\w${user}\$${reset} "
 PROMPT_DIRTRIM=3
-unset BLUE GREEN RESET
+unset user path reset
 
 # Set the colors used by ls. See dircolors(1) for options and fine-tuning.
 [[ -f "${HOME}/.dircolors" ]] && DIRCOLORS="${HOME}/.dircolors" \
