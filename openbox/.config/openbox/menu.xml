@@ -7,6 +7,9 @@
 
 <menu id="root-menu" label="Openbox 3">
   <!-- Applications launched form the menu -->
+  <item label="alacritty">
+    <action name="Execute"><execute>alacritty</execute></action>
+  </item>
   <item label="terminal">
     <action name="Execute"><execute>x-terminal-emulator</execute></action>
   </item>
