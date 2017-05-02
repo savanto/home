@@ -10,13 +10,18 @@
 
 [alias]
   ac = !git add -A && git commit
+  br = branch
   ca = commit -a
   ch = checkout
   cm = commit
   cp = cherry-pick
+  gr = log --graph --all --oneline --decorate
   st = status -sb
   ls = ls-tree --name-only -r HEAD
+
   pom = pull origin master
+  chom = !git fetch && git checkout -B master origin/master
+
   assume = update-index --assume-unchanged
   backtag = "!sh -c '[ $# -ge 2 ] && GIT_COMMITTER_DATE=\"$1\" git tag -a $2 $3 || echo \"Usage: git backtag <date time> <name> [<commit>]\" && exit 1' -"
   branches = branch -a
@@ -32,3 +37,4 @@
 
 [help]
   autocorrect = 0
+
