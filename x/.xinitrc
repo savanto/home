@@ -5,7 +5,10 @@
 # Set keyboard mapping.
 /usr/bin/setxkbmap -model pc105 \
   -layout us,ru \
-  -option grp:shifts_toggle,grp_led:scroll,compose:ralt
+  -option grp:shifts_toggle \
+  -option grp_led:scroll \
+  -option compose:menu \
+  -option terminate:ctrl_alt_bksp
 
 # Set numlock on
 /usr/bin/numlockx on
