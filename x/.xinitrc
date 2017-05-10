@@ -10,9 +10,10 @@
   -option compose:menu \
   -option terminate:ctrl_alt_bksp
 
-# Set numlock on
+# Set keyboard options.
 /usr/bin/numlockx on
-/usr/bin/xset led 1
+/usr/bin/xset led 1 # Numlock led
+/usr/bin/xset r rate 300 30 # Key repeat delay (ms) and rate (/sec)
 
 # Start window manager in-process.
 exec i3
