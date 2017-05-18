@@ -32,6 +32,12 @@ alias acs='apt-cache search'
 alias act='apt-cache show'
 alias acp='apt-cache policy'
 
+# df
+alias df='df -h'
+
+# du
+alias du='du -h'
+
 # sqlite3
 alias sqlite='sqlite3'
 
