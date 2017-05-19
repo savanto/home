@@ -23,6 +23,9 @@ alias dmesg='dmesg --color=auto'
 # sudo (hack to allow sudo with aliases)
 alias sudo='sudo '
 
+# xsel
+alias xsel='xsel -l /dev/null'
+
 # apt-get
 alias agi='apt-get install --no-install-recommends'
 alias agu='apt-get upgrade -V'
