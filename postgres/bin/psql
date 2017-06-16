@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -e
+
+_psql() {
+  /usr/bin/psql $@
+  exit $?
+}
+
+PGPASS=~/.pgpass
+[[ $# -ne 1 || ! -r "$PGPASS" ]] && _psql $@
+
+ifs="$IFS"
+IFS=':' entry=($(grep -v '^#' "$PGPASS" | sed -n "/$1/{s/*//g;p;q}"))
+IFS="$ifs"
+[[ -z "${entry[@]}" ]] && _psql $@
+
+[[ -n "${entry[0]}" ]] && args="$args -h ${entry[0]}"
+[[ -n "${entry[1]}" ]] && args="$args -p ${entry[1]}"
+[[ -n "${entry[3]}" ]] && args="$args -U ${entry[3]}"
+[[ -n "${entry[4]}" ]] && args="$args -w" || args="$args -W"
+[[ -n "${entry[2]}" ]] && db="${entry[2]}"
+args="$args $db"
+
+[[ "$1" == "$db" ]] && _psql $args
+
+_psql $@
+
