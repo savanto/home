@@ -1,0 +1,6 @@
+/* Never scroll tabbar. */
+.tabbrowser-tab {
+  min-width: 016px !important;
+  clip-width: 016px !important;
+}
+
