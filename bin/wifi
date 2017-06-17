@@ -91,13 +91,13 @@ while getopts c:h opt; do
 done
 shift $((OPTIND-1))
 
+ifconfig "$IFACE" up
 case "$1" in
   scan)
-    ifconfig "$IFACE" up
     iwlist "$IFACE" scan | scan
     ;;
   *)
-    killall wpa_supplicant 2>/dev/null || true
+    pkill wpa_supplicant || true
     dhclient -r "$IFACE" || true
 
     if [[ $# -eq 1 ]]; then
