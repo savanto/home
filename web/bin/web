@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Adapted from
+# https://zenbro.github.io/2015/05/24/searching-the-web-with-speed-of-thought-using-dmenu.html
+
+set -e
+
+hist() {
+  (umask 0177 && touch "$1")
+}
+
+SEARCH_HISTORY=~/.search_history
+search() {
+  [[ ! -r "$SEARCH_HISTORY" ]] && hist "$SEARCH_HISTORY"
+  [[ -n "$1" ]] && local query="$1" || local query="$(sort -u "$SEARCH_HISTORY" | dmenu -p "Search:")"
+  [[ -z "$query" ]] && exit || echo "$query" >>"$SEARCH_HISTORY" && open "https://duckduckgo.com/?q=$query"
+}
+
+URL_HISTORY=~/.web_history
+url() {
+  [[ ! -r "$URL_HISTORY" ]] && hist "$URL_HISTORY"
+  [[ -n "$1" ]] && local url="$1" || local url="$(sort -u "$URL_HISTORY" | dmenu -p "Url:")"
+  [[ -z "$url" ]] && exit || echo "$url" >>"$URL_HISTORY" && open "$url"
+}
+
+open() {
+  firefox "$@" && i3-msg [class="^Firefox$"] focus >/dev/null
+}
+
+while getopts :s opt; do
+  case "$opt" in
+    s) search=1 ;;
+  esac
+done
+shift $((OPTIND-1))
+
+[[ -z "$search" ]] && url "$@" || search "$@"
+

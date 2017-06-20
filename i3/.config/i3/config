@@ -37,6 +37,11 @@ bindsym --release Control+Print exec scrot -s
 bindsym --release Mod4+Shift+Print exec scrot
 bindsym --release Mod4+Print exec adb screencap
 
+# Web search.
+bindsym $mod+f exec --no-startup-id web -s
+# Web open.
+bindsym $mod+Shift+f exec --no-startup-id web
+
 # Kill focused window
 bindsym $mod+Shift+q kill
 
