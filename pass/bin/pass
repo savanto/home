@@ -107,7 +107,7 @@ add() {
   local OPTIND
   while getopts :r: opt; do
     case "$opt" in
-      r) local key="-r $OPTARG" ;;
+      r) local key="--no-default-recipient -r $OPTARG" ;;
       ?) usage add && exit 1
     esac
   done
@@ -148,7 +148,7 @@ edit() {
   while getopts :e:r: opt; do
     case "$opt" in
       e) EDITOR="$OPTARG" ;;
-      r) local key="-r $OPTARG" ;;
+      r) local key="--no-default-recipient -r $OPTARG" ;;
       ?) usage edit && exit 1 ;;
     esac
   done
@@ -216,7 +216,7 @@ import() {
   local OPTIND
   while getopts :r: opt; do
     case "$opt" in
-      r) local key="-r $OPTARG" ;;
+      r) local key="--no-default-recipient -r $OPTARG" ;;
       ?) usage import && exit 1
     esac
   done
