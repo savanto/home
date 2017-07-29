@@ -104,11 +104,11 @@ case "$1" in
       iwconfig "$IFACE" essid "$1"
     else
       trap "shred -zu $WIFI 2>/dev/null" ERR INT
-      if [[ -r "$conf" ]]; then
-        (umask 0077 && cat "$CONF" >"$WIFI")
-      elif [[ $# -eq 2 ]]; then
+      if [[ $# -eq 2 ]]; then
         (umask 0077 && wpa_passphrase "$1" "$2" >"$WIFI") \
           || (echo "Bad essid or passphrase." && exit 1)
+      elif [[ -r "$conf" ]]; then
+        (umask 0077 && cat "$conf" >"$WIFI")
       elif [[ -r "$WIFI" ]]; then
         :
       else
