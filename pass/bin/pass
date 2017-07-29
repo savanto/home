@@ -132,10 +132,10 @@ add() {
   if [[ -f "$file" ]]; then
     read -p "Password for $name exists. Overwrite? [y/n] " confirm
     [[ ! "$confirm" =~ ^[yY] ]] && return
-    $GPG -d "$file" | sed "1s/^.*$/$pass/" | $GPG $key -e -a -o "$file"
+    $GPG -d "$file" | sed "1s/^.*$/$pass/" | $GPG $key -e -o "$file"
     commit "$file" "Update password for $name"
   else
-    echo "$pass" | $GPG $key -e -a -o "$file"
+    echo "$pass" | $GPG $key -e -o "$file"
     commit "$file" "Add password for $name"
   fi
 
@@ -160,7 +160,7 @@ edit() {
   local tmp=$(mktemp -p $TMP)
   [[ -f "$file" ]] && $GPG -d "$file" >"$tmp"
   $EDITOR "$tmp"
-  $GPG $key -e -a -o "$file" "$tmp"
+  $GPG $key -e -o "$file" "$tmp"
   commit "$file" "Edit $name"
   $SHRED "$tmp"
   unset name file tmp
@@ -226,7 +226,7 @@ import() {
   local input="$1"
   local name="$2"
   local file="$PASSHOME/${name}.gpg"
-  $GPG -d "$input" | $GPG $key -e -a -o "$file"
+  $GPG -d "$input" | $GPG $key -e -o "$file"
   commit "$file" "Import $name"
 
   unset key input name file
