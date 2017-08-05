@@ -1,0 +1,54 @@
+#!/bin/bash
+
+set -e
+
+usage() {
+  echo "Usage: $0 [options]"
+  echo "  Read and encrypt/decrypt from stdin, writing to stdout."
+  echo "Options:"
+  echo "  -e    encrypt (default)"
+  echo "  -d    decrypt"
+  echo "  -k    ssh public key file for encrypting (default: ~/.ssh/id_rsa.pub)"
+  echo "        or ssh private key file for decrypting (default: ~/.ssh/id_rsa)"
+  echo "  -h    print this help and exit"
+}
+
+encrypt() {
+  [[ ! -r "$1" ]] && echo "Error: public key $1 not found/unreadable." && exit 1
+
+  local key=$(openssl rand -hex 32)
+  echo $key | openssl pkeyutl -encrypt -pubin -inkey <(ssh-keygen -f $1 -e -m PKCS8) | base64 -w0
+  echo
+  openssl enc -e -a -aes-256-cbc -K $key -iv '' # No IV -- one-time-use key.
+}
+
+decrypt() {
+  [[ ! -r "$1" ]] && echo "Error: private key $1 not found/unreadable." && exit 1
+
+  read key
+  openssl enc -d -a -aes-256-cbc \
+    -K $(echo $key | base64 -d | openssl pkeyutl -decrypt -inkey $1) -iv ''
+}
+
+
+while getopts dek: opt; do
+  case "$opt" in
+    d) dec=1 ;;
+    e) enc=1 ;;
+    k) key="$OPTARG" ;;
+    h) usage && exit ;;
+    ?) usage && exit 1 ;;
+  esac
+done
+
+[[ -n "$enc" && -n "$dec" ]] && echo 'Error: encrypt & decrypt both specified' && exit 1
+[[ -z "$enc" && -z "$dec" ]] && enc=1
+
+if [[ -n "$enc" ]]; then
+  encrypt ${key:-~/.ssh/id_rsa.pub}
+elif [[ -n "$dec" ]]; then
+  decrypt ${key:-~/.ssh/id_rsa}
+else
+  echo 'Error: unknown' && exit 1
+fi
+
