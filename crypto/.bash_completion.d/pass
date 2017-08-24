@@ -1,7 +1,3 @@
-#
-# Custom bash completions.
-#
-
 _pass() {
   local IFS=$'\n'
   local PASSHOME="${PASSHOME:-$HOME/.pass}"
@@ -12,6 +8,10 @@ _pass() {
   case "$prev" in
     edit|gen|generate|rm|remove|del|delete|ls|list|show|pass)
       COMPREPLY=($(compgen -X '*/.git*' -f "$PASSHOME/$cur" | sed -e "s,$PASSHOME/,," -e 's/.gpg//'))
+      ;;
+    -r) # From gpg's bash completion.
+      COMPREPLY=($(compgen -W "$(gpg --list-keys 2>/dev/null | \
+        sed -ne 's@^.*<\([^>]*\)>.*$@\1@p')" -- "$cur"))
       ;;
     import)
       compopt -o default -o filenames
