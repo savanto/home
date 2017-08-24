@@ -15,6 +15,8 @@
 /usr/bin/xset led 1 # Numlock led
 /usr/bin/xset r rate 300 30 # Key repeat delay (ms) and rate (/sec)
 
+[ -f ~/.config/monitors ] && sh ~/.config/monitors
+
 # Start window manager in-process.
 exec i3
 
