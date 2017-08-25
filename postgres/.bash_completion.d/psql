@@ -1,0 +1,24 @@
+_psql() {
+  local ifs="$IFS" IFS=: hosts dbs users i=0 entry
+  while read line; do
+    entry=($line)
+    hosts[$i]="${entry[0]}"
+    dbs[$i]="${entry[2]}"
+    users[$i]="${entry[3]}"
+    i+=1
+  done < <(grep -v '^#' ~/.pgpass | sed 's/*//g')
+  IFS="$ifs"
+
+  local cur="${COMP_WORDS[COMP_CWORD]}"
+  local prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+  case "$prev" in
+    psql) COMPREPLY=($(compgen -W "$(echo ${dbs[@]} ${users[@]} | sort -u)" -- "$cur")) ;;
+    -h) COMPREPLY=($(compgen -W "$(echo ${hosts[@]} | sort -u)" -- "$cur")) ;;
+    -U) COMPREPLY=($(compgen -W "$(echo ${users[@]} | sort -u)" -- "$cur")) ;;
+    *) COMPREPLY=($(compgen -W "$(echo ${dbs[@]} | sort -u)" -- "$cur")) ;;
+  esac
+}
+
+complete -F _psql psql
+

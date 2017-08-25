@@ -17,12 +17,12 @@ IFS="$ifs"
 
 [[ -n "${entry[0]}" ]] && args="$args -h ${entry[0]}"
 [[ -n "${entry[1]}" ]] && args="$args -p ${entry[1]}"
-[[ -n "${entry[3]}" ]] && args="$args -U ${entry[3]}"
+[[ -n "${entry[3]}" ]] && user="${entry[3]}" && args="$args -U $user"
 [[ -n "${entry[4]}" ]] && args="$args -w" || args="$args -W"
 [[ -n "${entry[2]}" ]] && db="${entry[2]}"
 args="$args $db"
 
-[[ "$1" == "$db" ]] && _psql $args
+[[ "$1" == "$db" || "$1" == "$user" ]] && _psql $args
 
 _psql $@
 
