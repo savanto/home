@@ -192,3 +192,6 @@ selection:
 
 hide_cursor_when_typing: false
 
+# Watch for config file changes and live reload. Override with --{no-}live-config-reload
+live_config_reload: false
+
