@@ -25,6 +25,8 @@ PATH="${PATH}:/sbin"
 
 # Prepend bin directory installed by pip if it exists
 [ -d "${HOME}/.local/bin" ] && PATH="${HOME}/.local/bin:${PATH}"
+# Prepend bin directory installed by cargo if it exists
+[ -d "${HOME}/.cargo/bin" ] && PATH="${HOME}/.cargo/bin:${PATH}"
 # Prepend personal bin directory to PATH if it exists
 [ -d "${HOME}/bin" ] && PATH="${HOME}/bin:${PATH}"
 
