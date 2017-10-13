@@ -1,0 +1,33 @@
+#!/bin/bash
+
+#
+# Extends the functionality of the `calendar` program.
+# This allows generating a ~/calendar file from multiple schedules in ~/.calendar
+
+set -e
+
+function generate {
+  mkdir -p $CALENDARS
+  {
+    echo "/*"
+    echo "   DO NOT MANUALLY EDIT THIS FILE."
+    echo
+    echo "   This file is auto-generated, and may be overwritten."
+    echo "   Instead edit one of the $CALENDARS/calendar.<something> files,"
+    echo "   and then run calendar -g to populate this file."
+    echo "*/"
+  } > $CALENDARS/calendar
+  for calendar in $CALENDARS/calendar.*; do
+    echo "#include \"${calendar##*/}\"" | tee -a $CALENDARS/calendar
+  done
+}
+
+CALENDARS=$HOME/.calendar
+while getopts :e:g opt; do
+  case "$opt" in
+    e) vi $CALENDARS/calendar.${OPTARG##*calendar.} && generate && exit 0 ;;
+    g) generate && exit 0 ;;
+  esac
+done
+
+/usr/bin/calendar "$@"
