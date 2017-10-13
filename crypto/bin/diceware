@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+
+import argparse
+import math
+import re
+import random
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-w', '--words', action='store', type=int, default=5, help='Num words to pick.')
+parser.add_argument('-n', '--num', action='store', type=int, default=1, help='Num phrases to return.')
+parser.add_argument('-c', '--chars', action='store', type=int, default=5, help='Min num chars/word.')
+parser.add_argument('-f', '--file', action='store', type=open, default='/usr/share/dict/words', help='Words file.')
+parser.add_argument('-e', '--entropy', action='store', type=int, default=0, help='Min entropy in bits.')
+parser.add_argument('-v', '--verbose', action='store_const', const=True, default=False, help='Display more info.')
+args = parser.parse_args()
+
+pattern = re.compile('^[a-z]{%d,}[a-z]*$' % args.chars)
+words = [word for word in (line.strip() for line in args.file.readlines()) if pattern.match(word)]
+word_entropy = math.log(len(words), 2)
+if args.entropy:
+    args.words = math.ceil(args.entropy / word_entropy)
+rng = random.SystemRandom()
+if args.verbose:
+    print('Approx. entropy: {:.1f} (choose {} words from {})'.format(
+        word_entropy * args.words,
+        args.words,
+        len(words)
+    ))
+    print('-' * 80)
+for _ in range(args.num):
+    print(*[rng.choice(words) for _ in range(args.words)])
+
