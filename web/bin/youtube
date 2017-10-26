@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+
+# Attempt to open a url as a video stream.
+# Following inputs are checked in this order:
+#   - First commandline arg
+#   - xsel primary selection
+#   - xsel clipboard selection
+REGEXES=(
+  '[w.]*youtube\.com.*'
+  'youtu\.be.*'
+)
+for url in "$1" "$(xsel)" "$(xsel -b)"; do
+  for regex in ${REGEXES[@]}; do
+    [[ "$url" =~ ^http[s]*://${regex}$ ]] && vlc "$url" && exit $?
+  done
+done
+
+echo "No suitable url found on the commandline or on the clipboard."
+exit 1

@@ -42,6 +42,8 @@ bindsym --release Mod4+Print exec adb screencap
 bindsym $mod+f exec --no-startup-id web -s
 # Web open.
 bindsym $mod+Shift+f exec --no-startup-id web
+# Youtube open.
+bindsym $mod+y exec --no-startup-id youtube
 
 # Kill focused window
 bindsym $mod+Shift+q kill
