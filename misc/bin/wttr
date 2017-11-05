@@ -1,0 +1,5 @@
+#!/bin/bash
+#
+# Show weather forecast.
+location="${1// /+}"
+curl -s wttr.in/"${location:-San+Francisco,+CA}"?m | sed '/Follow .*@igor/d'

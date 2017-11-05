@@ -99,10 +99,7 @@ alias ps='ps -ef'
 alias pgrep='pgrep -a'
 # ip
 alias ip='ip -c'
-# weather
-alias wttr='curl -4 wttr.in/San%20Francisco'
 # ip address
 alias ip?='curl https://api.ipify.org/'
 # jq
 alias jq.="jq -S '.'"
-
