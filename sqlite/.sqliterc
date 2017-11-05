@@ -1,0 +1,16 @@
+-- Silence command output from this file.
+.output /dev/null
+
+PRAGMA synchronous = OFF; -- Async writes to disk; corruption possible on crash.
+PRAGMA journal_mode = MEMORY; -- Rollback journal kept in memory, corruption possible on crash.
+PRAGMA foreign_keys = ON;
+PRAGMA locking_mode = EXCLUSIVE;
+PRAGMA cache_size = -500000;
+
+.mode column
+.nullvalue NULL
+.header on
+-- .timer on
+
+-- Unsilence further output.
+.output stdout
