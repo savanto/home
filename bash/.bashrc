@@ -102,4 +102,4 @@ alias ip='ip -c'
 # ip address
 alias ip?='curl https://api.ipify.org/'
 # jq
-alias jq.="jq -S '.'"
+alias jq.="jq -CS '.'"
