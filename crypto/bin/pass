@@ -16,7 +16,13 @@ else
 fi
 
 CLIP="$(which xsel)"
-[[ -n "$CLIP" ]] && CLIP="$CLIP -b -l /dev/null" && CLEAR="$CLIP -d"
+if [[ -n "$CLIP" && -n "$DISPLAY" ]]; then
+  CLIP="$CLIP -b -l /dev/null"
+  CLEAR="$CLIP -d"
+else
+  CLIP="cat"
+  CLEAR=":"
+fi
 
 GIT="$(which git)"
 [[ -n "$GIT" ]] && GIT="$GIT -C $PASSHOME"
@@ -98,7 +104,6 @@ commit() {
 }
 
 clip() {
-  [[ -z "$CLIP" ]] && echo "No clipping utility, cannot copy." >&2 && return
   echo "$1" | $CLIP
   { sleep $TIMEOUT && $CLEAR; } &
 }
