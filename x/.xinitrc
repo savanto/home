@@ -13,7 +13,7 @@
 # Set keyboard options.
 /usr/bin/numlockx on
 /usr/bin/xset led 1 # Numlock led
-/usr/bin/xset r rate 300 30 # Key repeat delay (ms) and rate (/sec)
+/usr/bin/xset r rate 200 40 # Key repeat delay (ms) and rate (/sec)
 
 [ -f ~/.config/monitors ] && sh ~/.config/monitors
 
