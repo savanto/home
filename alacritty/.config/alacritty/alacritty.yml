@@ -46,6 +46,12 @@ font:
 # Use custom cursor colors (colors.cursor) instead of inverting text color underneath.
 custom_cursor_colors: true
 
+# Cursor style
+# - Block
+# - Underline
+# - Beam
+cursor_style: Underline
+
 # Colors (modified Solarized)
 colors:
   # Default colors
