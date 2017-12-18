@@ -103,3 +103,5 @@ alias ip='ip -c'
 alias ip?='curl https://api.ipify.org/'
 # jq
 alias jq.="jq -CS '.'"
+# lp economy: double-sided, grayscale
+alias lpe="lp -o sides=two-sided-long-edge -o ColorModel=KGray"
